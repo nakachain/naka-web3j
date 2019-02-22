@@ -1,5 +1,6 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,27 @@ public class TransactionEncoder {
         // value field will already be hex encoded, so we need to convert into binary first
         byte[] data = Numeric.hexStringToByteArray(rawTransaction.getData());
         result.add(RlpString.create(data));
+
+        String token = rawTransaction.getToken();
+        if (token != null && token.length() > 0) {
+            result.add(RlpString.create(Numeric.hexStringToByteArray(token)));
+        } else {
+            result.add(RlpString.create(""));
+        }
+
+        String exchanger = rawTransaction.getExchanger();
+        if (exchanger != null && exchanger.length() > 0) {
+            result.add(RlpString.create(Numeric.hexStringToByteArray(exchanger)));
+        } else {
+            result.add(RlpString.create(""));
+        }
+
+        BigInteger exchangeRate = rawTransaction.getExchangeRate();
+        if (exchangeRate != null && exchangeRate.compareTo(BigInteger.ZERO) > 0) {
+            result.add(RlpString.create(rawTransaction.getValue()));
+        } else {
+            result.add(RlpString.create(BigInteger.ZERO));
+        }
 
         if (signatureData != null) {
             result.add(RlpString.create(signatureData.getV()));
