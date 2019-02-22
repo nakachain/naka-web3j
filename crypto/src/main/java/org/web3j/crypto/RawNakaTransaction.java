@@ -1,3 +1,5 @@
+package org.web3j.crypto;
+
 import java.math.BigInteger;
 
 public class RawNakaTransaction extends RawTransaction {
@@ -6,17 +8,9 @@ public class RawNakaTransaction extends RawTransaction {
     private String mExchanger;
     private BigInteger mExchangeRate;
 
-    protected RawNakaTransaction(
-        BigInteger nonce,
-        BigInteger gasPrice,
-        BigInteger gasLimit,
-        String to,
-        BigInteger value,
-        String data,
-        String token,
-        String exchanger,
-        BigInteger exchangeRate
-    ) {
+    protected RawNakaTransaction(BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String to, BigInteger value, String data,
+            String token, String exchanger, BigInteger exchangeRate) {
         super(nonce, gasPrice, gasLimit, to, value, data);
         this.mToken = token;
         this.mExchanger = exchanger;
