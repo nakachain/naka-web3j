@@ -90,17 +90,14 @@ public class RawTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value) throws IOException {
+            String data, BigInteger value, String token, String exchanger, 
+            BigInteger exchangeRate) throws IOException {
 
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce,
-                gasPrice,
-                gasLimit,
-                to,
-                value,
-                data);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce,
+                gasPrice, gasLimit, to, value, data, token, exchanger, 
+                exchangeRate);
 
         return signAndSend(rawTransaction);
     }

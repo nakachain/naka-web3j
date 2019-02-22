@@ -43,18 +43,17 @@ public abstract class TransactionManager {
 
     protected TransactionReceipt executeTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
-            throws IOException, TransactionException {
+            String data, BigInteger value, String token, String exchanger, 
+            BigInteger exchangeRate) throws IOException, TransactionException {
 
-        EthSendTransaction ethSendTransaction = sendTransaction(
-                gasPrice, gasLimit, to, data, value);
+        EthSendTransaction ethSendTransaction = sendTransaction(gasPrice, 
+                gasLimit, to, data, value, token, exchanger, exchangeRate);
         return processResponse(ethSendTransaction);
     }
 
-    public abstract EthSendTransaction sendTransaction(
-            BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
-            throws IOException;
+    public abstract EthSendTransaction sendTransaction(BigInteger gasPrice, 
+            BigInteger gasLimit, String to, String data, BigInteger value, 
+            String token, String exchanger, BigInteger exchangeRate) throws IOException;
 
     public String getFromAddress() {
         return fromAddress;
