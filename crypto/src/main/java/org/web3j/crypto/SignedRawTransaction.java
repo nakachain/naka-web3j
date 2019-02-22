@@ -11,14 +11,25 @@ public class SignedRawTransaction extends RawTransaction {
     private Sign.SignatureData signatureData;
 
     public SignedRawTransaction(BigInteger nonce, BigInteger gasPrice,
-            BigInteger gasLimit, String to, BigInteger value, String data,
+            BigInteger gasLimit, String to, BigInteger value, String data, 
+            String token, String exchanger, BigInteger exchangeRate,
             Sign.SignatureData signatureData) {
-        super(nonce, gasPrice, gasLimit, to, value, data);
+        super(nonce, gasPrice, gasLimit, to, value, data, token, exchanger, 
+            exchangeRate);
         this.signatureData = signatureData;
     }
 
     public Sign.SignatureData getSignatureData() {
         return signatureData;
+    }
+
+    public Integer getChainId() {
+        byte v = signatureData.getV();
+        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+            return null;
+        }
+        Integer chainId = (v - CHAIN_ID_INC) / 2;
+        return chainId;
     }
 
     public String getFrom() throws SignatureException {
@@ -54,14 +65,5 @@ public class SignedRawTransaction extends RawTransaction {
             inc = 1;
         }
         return (byte) (realV + inc);
-    }
-
-    public Integer getChainId() {
-        byte v = signatureData.getV();
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
-            return null;
-        }
-        Integer chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
     }
 }
