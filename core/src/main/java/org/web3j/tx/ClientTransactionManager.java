@@ -44,7 +44,8 @@ public class ClientTransactionManager extends TransactionManager {
             throws IOException {
 
         Transaction transaction = new Transaction(
-                getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+                getFromAddress(), null, gasPrice, gasLimit, to, value, data, 
+                token, exchanger, exchangeRate);
 
         return web3j.ethSendTransaction(transaction)
                 .send();
