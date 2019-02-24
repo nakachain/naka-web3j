@@ -25,10 +25,14 @@ public class Transaction {
     private BigInteger gasPrice;
     private BigInteger value;
     private String data;
+    private String token;
+    private String exchanger;
+    private BigInteger exchangeRate;
     private BigInteger nonce;  // nonce field is not present on eth_call/eth_estimateGas
 
-    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-                       String to, BigInteger value, String data) {
+    public Transaction(String from, BigInteger nonce, BigInteger gasPrice, 
+            BigInteger gasLimit, String to, BigInteger value, String data, 
+            String token, String exchanger, BigInteger exchangeRate) {
         this.from = from;
         this.to = to;
         this.gas = gasLimit;
@@ -39,46 +43,54 @@ public class Transaction {
             this.data = Numeric.prependHexPrefix(data);
         }
 
+        this.token = token;
+        this.exchanger = exchanger;
+        this.exchangeRate = exchangeRate;
         this.nonce = nonce;
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-            BigInteger value, String init) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, null, value, init);
+            String from, BigInteger nonce, BigInteger gasPrice, 
+            BigInteger gasLimit, BigInteger value, String init, String token, 
+            String exchanger, BigInteger exchangeRate) {
+        return new Transaction(from, nonce, gasPrice, gasLimit, null, value, 
+            init, token, exchanger, exchangeRate);
     }
 
     public static Transaction createContractTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, String init) {
-
-        return createContractTransaction(from, nonce, gasPrice, null, null, init);
+            String from, BigInteger nonce, BigInteger gasPrice, String init, 
+            String token, String exchanger, BigInteger exchangeRate) {
+        return createContractTransaction(from, nonce, gasPrice, null, null, 
+            init, token, exchanger, exchangeRate);
     }
 
     public static Transaction createEtherTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null);
+            String from, BigInteger nonce, BigInteger gasPrice, 
+            BigInteger gasLimit, String to, BigInteger value, String token, 
+            String exchanger, BigInteger exchangeRate) {
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, null, 
+            token, exchanger, exchangeRate);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            BigInteger value, String data) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data);
+            String from, BigInteger nonce, BigInteger gasPrice, 
+            BigInteger gasLimit, String to, BigInteger value, String data,
+            String token, String exchanger, BigInteger exchangeRate) {
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, value, data, 
+            token, exchanger, exchangeRate);
     }
 
     public static Transaction createFunctionCallTransaction(
-            String from, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data) {
-
-        return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data);
+            String from, BigInteger nonce, BigInteger gasPrice, 
+            BigInteger gasLimit, String to, String data, String token, 
+            String exchanger, BigInteger exchangeRate) {
+        return new Transaction(from, nonce, gasPrice, gasLimit, to, null, data, 
+            token, exchanger, exchangeRate);
     }
 
     public static Transaction createEthCallTransaction(String from, String to, String data) {
-
-        return new Transaction(from, null, null, null, to, null, data);
+        return new Transaction(from, null, null, null, to, null, data, null, 
+            null, null);
     }
 
     public String getFrom() {
@@ -103,6 +115,18 @@ public class Transaction {
 
     public String getData() {
         return data;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getExchanger() {
+        return exchanger;
+    }
+
+    public String getExchangeRate() {
+        return convert(exchangeRate);
     }
 
     public String getNonce() {

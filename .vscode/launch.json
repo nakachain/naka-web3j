@@ -1,0 +1,91 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AbiTypesGenerator<codegen>",
+            "request": "launch",
+            "mainClass": "org.web3j.codegen.AbiTypesGenerator",
+            "projectName": "codegen"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AbiTypesMapperGenerator<codegen>",
+            "request": "launch",
+            "mainClass": "org.web3j.codegen.AbiTypesMapperGenerator",
+            "projectName": "codegen"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SolidityFunctionWrapperGenerator<codegen>",
+            "request": "launch",
+            "mainClass": "org.web3j.codegen.SolidityFunctionWrapperGenerator",
+            "projectName": "codegen"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TruffleJsonFunctionWrapperGenerator<codegen>",
+            "request": "launch",
+            "mainClass": "org.web3j.codegen.TruffleJsonFunctionWrapperGenerator",
+            "projectName": "codegen"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-TupleGenerator<codegen>",
+            "request": "launch",
+            "mainClass": "org.web3j.codegen.TupleGenerator",
+            "projectName": "codegen"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-KeyImporter<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.KeyImporter",
+            "projectName": "console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Runner<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.Runner",
+            "projectName": "console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-WalletCreator<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.WalletCreator",
+            "projectName": "console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-WalletRunner<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.WalletRunner",
+            "projectName": "console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-WalletSendFunds<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.WalletSendFunds",
+            "projectName": "console"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-WalletUpdater<console>",
+            "request": "launch",
+            "mainClass": "org.web3j.console.WalletUpdater",
+            "projectName": "console"
+        }
+    ]
+}
