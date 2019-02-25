@@ -111,7 +111,8 @@ public class WalletSendFunds extends WalletManager {
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
             Future<TransactionReceipt> future = Transfer.sendFunds(
-                    web3j, credentials, destinationAddress, amountInWei, Convert.Unit.WEI)
+                    web3j, credentials, destinationAddress, amountInWei, 
+                    Convert.Unit.WEI, null, null, null)
                     .sendAsync();
 
             while (!future.isDone()) {
