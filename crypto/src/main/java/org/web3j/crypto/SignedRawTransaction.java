@@ -2,6 +2,7 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
+import java.util.Arrays;
 
 public class SignedRawTransaction extends RawTransaction {
 
@@ -24,7 +25,7 @@ public class SignedRawTransaction extends RawTransaction {
     }
 
     public Integer getChainId() {
-        byte v = signatureData.getV();
+        Integer v = Arrays.hashCode(signatureData.getV());
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
@@ -40,10 +41,10 @@ public class SignedRawTransaction extends RawTransaction {
         } else {
             encodedTransaction = TransactionEncoder.encode(this, chainId.byteValue());
         }
-        byte v = signatureData.getV();
+        byte[] v = signatureData.getV();
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
-        Sign.SignatureData signatureDataV = new Sign.SignatureData(getRealV(v), r, s);
+        Sign.SignatureData signatureDataV = new Sign.SignatureData(v, r, s);
         BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureDataV);
         return "0x" + Keys.getAddress(key);
     }
@@ -55,6 +56,7 @@ public class SignedRawTransaction extends RawTransaction {
         }
     }
 
+    // TODO: do we need this anymore after changing the v byte to byte[]?
     private byte getRealV(byte v) {
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return v;
