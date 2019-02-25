@@ -70,13 +70,14 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         return RawTransaction.createEtherTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
+                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value, null, null, null);
     }
 
     private static RawTransaction createSmartContractTransaction(BigInteger nonce)
             throws Exception {
         return RawTransaction.createContractTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
+                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, 
+                getFibonacciSolidityBinary(), null, null, null);
     }
 
     BigInteger getNonce(String address) throws Exception {

@@ -75,7 +75,10 @@ public class GreeterContractIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 BigInteger.ZERO,
-                getGreeterSolidityBinary() + encodedConstructor);
+                getGreeterSolidityBinary() + encodedConstructor, 
+                null, 
+                null, 
+                null);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
                 transactionResponse = web3j.ethSendTransaction(transaction)

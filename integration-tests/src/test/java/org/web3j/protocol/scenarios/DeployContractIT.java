@@ -65,7 +65,10 @@ public class DeployContractIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 BigInteger.ZERO,
-                getFibonacciSolidityBinary());
+                getFibonacciSolidityBinary(), 
+                null, 
+                null, 
+                null);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction
                 transactionResponse = web3j.ethSendTransaction(transaction)

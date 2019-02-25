@@ -97,7 +97,7 @@ public class EventFilterIT extends Scenario {
         BigInteger nonce = getNonce(credentials.getAddress());
         Transaction transaction = Transaction.createFunctionCallTransaction(
                 credentials.getAddress(), nonce, Transaction.DEFAULT_GAS, gas, contractAddress,
-                encodedFunction);
+                encodedFunction, null, null, null);
 
         org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
                 web3j.ethSendTransaction(transaction).sendAsync().get();

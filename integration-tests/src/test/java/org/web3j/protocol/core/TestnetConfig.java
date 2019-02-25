@@ -64,7 +64,10 @@ public class TestnetConfig implements IntegrationTestConfig {
                 validAccount(),
                 BigInteger.ZERO,  // nonce
                 Transaction.DEFAULT_GAS,
-                validContractCode()
+                validContractCode(),
+                null,
+                null,
+                null
         );
     }
 

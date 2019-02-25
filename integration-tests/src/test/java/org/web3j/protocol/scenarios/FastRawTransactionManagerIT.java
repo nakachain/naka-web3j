@@ -124,6 +124,6 @@ public class FastRawTransactionManagerIT extends Scenario {
             Transfer transfer, BigInteger gasPrice) {
         return transfer.sendFunds(
                 BOB.getAddress(), BigDecimal.valueOf(1.0), Convert.Unit.KWEI,
-                gasPrice, Transfer.GAS_LIMIT);
+                gasPrice, Transfer.GAS_LIMIT, null, null, null);
     }
 }

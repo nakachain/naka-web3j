@@ -162,7 +162,10 @@ public class HumanStandardTokenIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 BigInteger.ZERO,
-                getHumanStandardTokenBinary() + encodedConstructor);
+                getHumanStandardTokenBinary() + encodedConstructor, 
+                null, 
+                null, 
+                null);
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
@@ -283,7 +286,10 @@ public class HumanStandardTokenIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 contractAddress,
-                encodedFunction);
+                encodedFunction, 
+                null, 
+                null, 
+                null);
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
