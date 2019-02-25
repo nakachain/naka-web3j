@@ -21,7 +21,7 @@ public class TransactionDecoderTest {
         String to = "0x0add5355";
         BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                nonce, gasPrice, gasLimit, to, value);
+                nonce, gasPrice, gasLimit, to, value, null, null, null);
         byte[] encodedMessage = TransactionEncoder.encode(rawTransaction);
         String hexMessage = Numeric.toHexString(encodedMessage);
 
@@ -43,7 +43,7 @@ public class TransactionDecoderTest {
         String to = "0x0add5355";
         BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                nonce, gasPrice, gasLimit, to, value);
+                nonce, gasPrice, gasLimit, to, value, null, null, null);
         byte[] signedMessage = TransactionEncoder.signMessage(
                 rawTransaction, SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);
@@ -77,7 +77,7 @@ public class TransactionDecoderTest {
         BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
         Integer chainId = 1;
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                nonce, gasPrice, gasLimit, to, value);
+                nonce, gasPrice, gasLimit, to, value, null, null, null);
         byte[] signedMessage = TransactionEncoder.signMessage(
                 rawTransaction, chainId.byteValue(), SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);

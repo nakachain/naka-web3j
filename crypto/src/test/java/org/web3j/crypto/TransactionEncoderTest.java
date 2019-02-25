@@ -68,20 +68,20 @@ public class TransactionEncoderTest {
 
     private static RawTransaction createEtherTransaction() {
         return RawTransaction.createEtherTransaction(
-                BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, "0xadd5355",
-                BigInteger.valueOf(Long.MAX_VALUE));
+                BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, "0x3535353535353535353535353535353535353535",
+                BigInteger.ONE, null, null, null);
     }
 
     static RawTransaction createContractTransaction() {
         return RawTransaction.createContractTransaction(
                 BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, BigInteger.valueOf(Long.MAX_VALUE),
-                "01234566789");
+                "01234566789", null, null, null);
     }
 
     private static RawTransaction createEip155RawTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.valueOf(9), BigInteger.valueOf(20000000000L),
                 BigInteger.valueOf(21000), "0x3535353535353535353535353535353535353535",
-                BigInteger.valueOf(1000000000000000000L));
+                BigInteger.valueOf(1000000000000000000L), null, null, null);
     }
 }
