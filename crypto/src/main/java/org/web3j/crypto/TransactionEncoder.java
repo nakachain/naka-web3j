@@ -47,7 +47,7 @@ public class TransactionEncoder {
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
-        return encode(rawTransaction, null);
+        return encode(rawTransaction, (Sign.SignatureData) null);
     }
 
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {

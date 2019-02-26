@@ -68,8 +68,9 @@ public class TransactionEncoderTest {
 
     private static RawTransaction createEtherTransaction() {
         return RawTransaction.createEtherTransaction(
-                BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, "0x3535353535353535353535353535353535353535",
-                BigInteger.ONE, null, null, null);
+                BigInteger.ZERO, BigInteger.ONE, BigInteger.TEN, 
+                "0x3535353535353535353535353535353535353535", BigInteger.ONE, 
+                null, null, null);
     }
 
     static RawTransaction createContractTransaction() {
