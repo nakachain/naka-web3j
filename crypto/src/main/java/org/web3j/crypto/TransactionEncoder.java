@@ -1,6 +1,7 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
+    private static final Long CHAIN_ID_INC = Long.valueOf(35);
+
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction);
         Sign.SignatureData signatureData = Sign.signMessage(
@@ -26,19 +29,19 @@ public class TransactionEncoder {
     }
 
     public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, Long chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
 
-        Sign.SignatureData eip155SignatureData = createEip155SignatureData(signatureData, chainId);
+        Sign.SignatureData eip155SignatureData = createEip155SignatureData(
+                signatureData, chainId);
         return encode(rawTransaction, eip155SignatureData);
     }
 
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
-        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
-
+            Sign.SignatureData signatureData, Long chainId) {
+        byte[] v = getEIP155V(chainId);
         return new Sign.SignatureData(
                 v, signatureData.getR(), signatureData.getS());
     }
@@ -47,9 +50,10 @@ public class TransactionEncoder {
         return encode(rawTransaction, null);
     }
 
-    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+    public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
+        byte[] v = getEIP155V(chainId);
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+                v, new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
@@ -111,5 +115,10 @@ public class TransactionEncoder {
         }
 
         return result;
+    }
+
+    private static byte[] getEIP155V(Long chainId) {
+        Long modifiedV = (chainId * 2) + CHAIN_ID_INC;
+        return ByteBuffer.allocate(Long.BYTES).putLong(modifiedV.longValue()).array();
     }
 }

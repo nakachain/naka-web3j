@@ -24,22 +24,22 @@ public class SignedRawTransaction extends RawTransaction {
         return signatureData;
     }
 
-    public Integer getChainId() {
+    public Long getChainId() {
         Integer v = Arrays.hashCode(signatureData.getV());
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
         Integer chainId = (v - CHAIN_ID_INC) / 2;
-        return chainId;
+        return Long.valueOf(chainId);
     }
 
     public String getFrom() throws SignatureException {
-        Integer chainId = getChainId();
+        Long chainId = getChainId();
         byte[] encodedTransaction;
         if (null == chainId) {
             encodedTransaction = TransactionEncoder.encode(this);
         } else {
-            encodedTransaction = TransactionEncoder.encode(this, chainId.byteValue());
+            encodedTransaction = TransactionEncoder.encode(this, chainId);
         }
         byte[] v = signatureData.getV();
         byte[] r = signatureData.getR();

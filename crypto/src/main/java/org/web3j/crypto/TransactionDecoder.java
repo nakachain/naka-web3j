@@ -24,7 +24,7 @@ public class TransactionDecoder {
         BigInteger exchangeRate = ((RlpString) values.getValues().get(8)).asPositiveBigInteger();
 
         if (values.getValues().size() > 9) {
-            byte v = ((RlpString) values.getValues().get(9)).getBytes()[0];
+            byte[] v = ((RlpString) values.getValues().get(9)).getBytes();
             byte[] r = Numeric.toBytesPadded(
                 Numeric.toBigInt(((RlpString) values.getValues().get(10)).getBytes()), 32);
             byte[] s = Numeric.toBytesPadded(
