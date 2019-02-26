@@ -18,7 +18,7 @@ public class TransactionUtilsTest {
     @Test
     public void testGenerateEip155TransactionHash() {
         assertThat(generateTransactionHashHexEncoded(
-                TransactionEncoderTest.createContractTransaction(), (byte) 1,
+                TransactionEncoderTest.createContractTransaction(), Long.valueOf(1),
                 SampleKeys.CREDENTIALS),
                 is("0x568c7f6920c1cee8332e245c473657b9c53044eb96ed7532f5550f1139861e9e"));
     }

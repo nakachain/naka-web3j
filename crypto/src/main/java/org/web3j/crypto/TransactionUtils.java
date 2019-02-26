@@ -55,7 +55,7 @@ public class TransactionUtils {
      * @return transaction hash as a hex encoded string
      */
     public static String generateTransactionHashHexEncoded(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, Long chainId, Credentials credentials) {
         return Numeric.toHexString(generateTransactionHash(rawTransaction, chainId, credentials));
     }
 }
