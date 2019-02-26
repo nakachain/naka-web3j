@@ -91,6 +91,7 @@ allprojects {
     checkstyle {
         toolVersion = "7.7"
         configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+        checkstyleTest.enabled = false
     }
 }
 
