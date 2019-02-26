@@ -29,7 +29,7 @@ public class TransactionUtils {
      * @return encoded transaction hash
      */
     public static byte[] generateTransactionHash(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, Long chainId, Credentials credentials) {
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         return Hash.sha3(signedMessage);
     }

@@ -75,11 +75,11 @@ public class TransactionDecoderTest {
         BigInteger gasLimit = BigInteger.TEN;
         String to = "0x0add5355";
         BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
-        Integer chainId = 1;
+        Long chainId = Long.valueOf(1);
         RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
                 nonce, gasPrice, gasLimit, to, value, null, null, null);
         byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, chainId.byteValue(), SampleKeys.CREDENTIALS);
+                rawTransaction, chainId, SampleKeys.CREDENTIALS);
         String hexMessage = Numeric.toHexString(signedMessage);
 
         RawTransaction result = TransactionDecoder.decode(hexMessage);

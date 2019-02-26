@@ -30,7 +30,7 @@ public class TransactionEncoderTest {
     @Test
     public void testEtherTransactionAsRlpValues() {
         List<RlpType> rlpStrings = TransactionEncoder.asRlpValues(createEtherTransaction(),
-                new Sign.SignatureData((byte) 0, new byte[32], new byte[32]));
+                new Sign.SignatureData(new byte[]{0}, new byte[32], new byte[32]));
         assertThat(rlpStrings.size(), is(9));
         assertThat(rlpStrings.get(3), equalTo(RlpString.create(new BigInteger("add5355", 16))));
     }
@@ -45,7 +45,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void testEip155Encode() {
-        assertThat(TransactionEncoder.encode(createEip155RawTransaction(), (byte) 1),
+        assertThat(TransactionEncoder.encode(createEip155RawTransaction(), Long.valueOf(1)),
                 is(Numeric.hexStringToByteArray(
                         "0xec098504a817c800825208943535353535353535353535353535353535353535880de0"
                                 + "b6b3a764000080018080")));
@@ -58,7 +58,7 @@ public class TransactionEncoderTest {
                 "0x4646464646464646464646464646464646464646464646464646464646464646");
 
         assertThat(TransactionEncoder.signMessage(
-                createEip155RawTransaction(), (byte) 1, credentials),
+                createEip155RawTransaction(), Long.valueOf(1), credentials),
                 is(Numeric.hexStringToByteArray(
                         "0xf86c098504a817c800825208943535353535353535353535353535353535353535880"
                                 + "de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d"
