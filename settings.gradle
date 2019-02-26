@@ -1,4 +1,4 @@
-rootProject.name = 'base'
+rootProject.name = 'naka-web3j'
 
 include 'abi'
 include 'codegen'
