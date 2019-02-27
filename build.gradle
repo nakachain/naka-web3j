@@ -209,6 +209,13 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     )
                 }
 
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(
+                            userName: ossrhUsername, 
+                            password: ossrhPassword
+                    )
+                }
+
                 pom.project {
                     name 'naka-web3j'
                     packaging 'jar'
