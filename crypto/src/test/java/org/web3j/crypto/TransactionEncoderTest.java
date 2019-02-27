@@ -56,13 +56,10 @@ public class TransactionEncoderTest {
 //         // https://github.com/ethereum/EIPs/issues/155
 //         Credentials credentials = Credentials.create(
 //                 "0x4646464646464646464646464646464646464646464646464646464646464646");
-//         assertThat(TransactionEncoder.signMessage(
-//                 createEip155RawTransaction(), Long.valueOf(1), credentials),
-//                 is(Numeric.hexStringToByteArray(
-//                         "0xf86c098504a817c800825208943535353535353535353535353535353535353535880"
-//                                 + "de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d"
-//                                 + "3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf55"
-//                                 + "5c9f3dc64214b297fb1966a3b6d83")));
+//         assertThat(
+//                 TransactionEncoder.signMessage(createEip155RawTransaction(), Long.valueOf(1), credentials),
+//                 is(Numeric.hexStringToByteArray("0xf86f098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008080808026a018a87a924f9a536211f51a437af38b658e20bba6051de216a4b3126d7670c578a07b9b6f99a43d3b07a7faea261ae99ab6fe6b6e9c410b2d763527b9b0ab68f404"))
+//         );
 //     }
 
     private static RawTransaction createEtherTransaction() {

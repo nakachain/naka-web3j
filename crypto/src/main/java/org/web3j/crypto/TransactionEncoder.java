@@ -109,7 +109,7 @@ public class TransactionEncoder {
         }
 
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }
