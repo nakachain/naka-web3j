@@ -89,6 +89,9 @@ public class Transfer extends ManagedTransaction {
      * @param toAddress destination address
      * @param value amount to send
      * @param unit of specified send
+     * @param token Pay-By-Token token to pay for gas fee
+     * @param exchanger Pay-By-Token exchanger who will accept token and pay for gas fee
+     * @param exchangeRate Pay-By-Token exchange rate of the token to native
      *
      * @return {@link RemoteCall} containing executing transaction
      */
