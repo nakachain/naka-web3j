@@ -52,10 +52,8 @@ public class TransactionEncoderTest {
 //     }
 
     @Test
+    // https://github.com/ethereum/EIPs/issues/155
     public void testEip155Transaction() {
-        // https://github.com/ethereum/EIPs/issues/155
-        // Credentials credentials = Credentials.create(
-        //         "0x4646464646464646464646464646464646464646464646464646464646464646");
         byte[] signed = TransactionEncoder.signMessage(createEip155RawTransaction(), Long.valueOf(2018), SampleKeys.CREDENTIALS);
         System.out.println("signedTx " + Numeric.toHexString(signed));
         assertThat(
@@ -80,7 +78,8 @@ public class TransactionEncoderTest {
     private static RawTransaction createEip155RawTransaction() {
         return RawTransaction.createEtherTransaction(
                 BigInteger.valueOf(9), BigInteger.valueOf(20000000000L),
-                BigInteger.valueOf(21000), "0x3535353535353535353535353535353535353535",
+                BigInteger.valueOf(21000), 
+                "0x3535353535353535353535353535353535353535", 
                 BigInteger.valueOf(1000000000000000000L), null, null, null);
     }
 }

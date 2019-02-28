@@ -29,17 +29,11 @@ public class TransactionEncoder {
 
     public static byte[] signMessage(
             RawTransaction rawTransaction, Long chainId, Credentials credentials) {
-        System.out.println("creds " + credentials.getAddress());
-
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
         Sign.SignatureData eip155SignatureData = createEip155SignatureData(
                 signatureData, chainId);
-        System.out.println("VRS second");
-        System.out.println("V " + Numeric.toHexString(eip155SignatureData.getV()));
-        System.out.println("R " + Numeric.toHexString(eip155SignatureData.getR()));
-        System.out.println("S " + Numeric.toHexString(eip155SignatureData.getS()));
         return encode(rawTransaction, eip155SignatureData);
     }
 
@@ -57,10 +51,6 @@ public class TransactionEncoder {
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
             Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
-        System.out.println("VRS first");
-        System.out.println("V " + Numeric.toHexString(signatureData.getV()));
-        System.out.println("R " + Numeric.toHexString(signatureData.getR()));
-        System.out.println("S " + Numeric.toHexString(signatureData.getS()));
         return encode(rawTransaction, signatureData);
     }
 
