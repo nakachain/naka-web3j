@@ -42,7 +42,7 @@ public class TransactionEncoder {
     // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
     // https://github.com/ethereum/go-ethereum/blob/938cf4528ab5acbb6013be79a0548956713807a8/crypto/secp256k1/libsecp256k1/src/ecdsa_impl.h#L294
     public static Sign.SignatureData createEip155SignatureData(
-            byte[] transaction, Sign.SignatureData signatureData, 
+            byte[] encodedTransaction, Sign.SignatureData sigData, 
             BigInteger pubKey, Long chainId) {
 
         // Get recovery param so we know what to increment V by
@@ -50,10 +50,9 @@ public class TransactionEncoder {
         for (int i = 0; i < 4; i++) {
             BigInteger k = Sign.recoverFromSignature(
                     i, 
-                    new ECDSASignature(
-                            new BigInteger(1, signatureData.getR()), 
-                            new BigInteger(1, signatureData.getS())), 
-                    Hash.sha3(transaction));
+                    new ECDSASignature(new BigInteger(1, sigData.getR()), 
+                            new BigInteger(1, sigData.getS())), 
+                    Hash.sha3(encodedTransaction));
 
             if (k != null && k.equals(pubKey)) {
                 recId = i;
@@ -68,8 +67,7 @@ public class TransactionEncoder {
         final Long modifiedV = (chainId * 2) + CHAIN_ID_INC + recId;
         final byte[] v = Bytes.toByteArray(modifiedV);
 
-        return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+        return new Sign.SignatureData(v, sigData.getR(), sigData.getS());
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
