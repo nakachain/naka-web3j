@@ -33,13 +33,41 @@ public class TransactionEncoder {
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
         Sign.SignatureData eip155SignatureData = createEip155SignatureData(
-                signatureData, chainId);
+                encodedTransaction, signatureData, 
+                credentials.getEcKeyPair().getPublicKey(), chainId);
         return encode(rawTransaction, eip155SignatureData);
     }
 
+    // Modifies V value based on EIP155 specs
+    // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
+    // https://github.com/ethereum/go-ethereum/blob/938cf4528ab5acbb6013be79a0548956713807a8/crypto/secp256k1/libsecp256k1/src/ecdsa_impl.h#L294
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, Long chainId) {
-        byte[] v = getEIP155V(chainId);
+            byte[] transaction, Sign.SignatureData signatureData, 
+            BigInteger pubKey, Long chainId) {
+
+        // Get recovery param so we know what to increment V by
+        int recId = -1;
+        for (int i = 0; i < 4; i++) {
+            BigInteger k = Sign.recoverFromSignature(
+                    i, 
+                    new ECDSASignature(
+                            new BigInteger(1, signatureData.getR()), 
+                            new BigInteger(1, signatureData.getS())), 
+                    Hash.sha3(transaction));
+
+            if (k != null && k.equals(pubKey)) {
+                recId = i;
+                break;
+            }
+        }
+        if (recId == -1) {
+            throw new RuntimeException("Could not construct EIP155 signature.");
+        }
+
+        // Modify V for replay attack protection
+        final Long modifiedV = (chainId * 2) + CHAIN_ID_INC + recId;
+        final byte[] v = Bytes.toByteArray(modifiedV);
+
         return new Sign.SignatureData(
                 v, signatureData.getR(), signatureData.getS());
     }
@@ -112,10 +140,5 @@ public class TransactionEncoder {
         }
 
         return result;
-    }
-
-    private static byte[] getEIP155V(Long chainId) {
-        Long modifiedV = (chainId * 2) + 36;
-        return Bytes.toByteArray(modifiedV);
     }
 }

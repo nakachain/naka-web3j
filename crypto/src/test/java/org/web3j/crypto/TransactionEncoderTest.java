@@ -54,8 +54,6 @@ public class TransactionEncoderTest {
     @Test
     // https://github.com/ethereum/EIPs/issues/155
     public void testEip155Transaction() {
-        byte[] signed = TransactionEncoder.signMessage(createEip155RawTransaction(), Long.valueOf(2018), SampleKeys.CREDENTIALS);
-        System.out.println("signedTx " + Numeric.toHexString(signed));
         assertThat(
                 TransactionEncoder.signMessage(createEip155RawTransaction(), Long.valueOf(2018), SampleKeys.CREDENTIALS),
                 is(Numeric.hexStringToByteArray("0xf871098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a764000080808080820fe8a0beb16e4f132cc7eb443808e3c0e67c7f521d467e6dc5354c5cdd4ba8a6298c82a02facb73a593edcb4d6256398175b156d66bab0b1f6720ddd40e7bc4bb87e2263"))
