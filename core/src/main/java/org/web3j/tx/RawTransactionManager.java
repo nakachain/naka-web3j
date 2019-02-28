@@ -108,7 +108,7 @@ public class RawTransactionManager extends TransactionManager {
      */
     public String sign(RawTransaction rawTransaction) {
         byte[] signedMessage;
-        if (chainId > ChainId.NONE) {
+        if (!chainId.equals(ChainId.NONE)) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);

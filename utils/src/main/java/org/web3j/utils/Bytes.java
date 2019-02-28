@@ -1,5 +1,6 @@
 package org.web3j.utils;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**

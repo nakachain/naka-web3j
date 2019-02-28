@@ -30,12 +30,17 @@ public class TransactionEncoder {
 
     public static byte[] signMessage(
             RawTransaction rawTransaction, Long chainId, Credentials credentials) {
+        System.out.println("creds " + credentials.getAddress());
+
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
-
         Sign.SignatureData eip155SignatureData = createEip155SignatureData(
                 signatureData, chainId);
+        System.out.println("VRS second");
+        System.out.println("V " + Numeric.toHexString(eip155SignatureData.getV()));
+        System.out.println("R " + Numeric.toHexString(eip155SignatureData.getR()));
+        System.out.println("S " + Numeric.toHexString(eip155SignatureData.getS()));
         return encode(rawTransaction, eip155SignatureData);
     }
 
@@ -51,9 +56,13 @@ public class TransactionEncoder {
     }
 
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
-        byte[] v = getEIP155V(chainId);
+        byte[] v = ByteBuffer.allocate(Long.BYTES).putLong(chainId.longValue()).array();
         Sign.SignatureData signatureData = new Sign.SignatureData(
                 v, new byte[] {}, new byte[] {});
+        System.out.println("VRS first");
+        System.out.println("V " + Numeric.toHexString(signatureData.getV()));
+        System.out.println("R " + Numeric.toHexString(signatureData.getR()));
+        System.out.println("S " + Numeric.toHexString(signatureData.getS()));
         return encode(rawTransaction, signatureData);
     }
 
@@ -118,7 +127,7 @@ public class TransactionEncoder {
     }
 
     private static byte[] getEIP155V(Long chainId) {
-        Long modifiedV = (chainId * 2) + CHAIN_ID_INC;
+        Long modifiedV = (chainId * 2) + 36;
         return ByteBuffer.allocate(Long.BYTES).putLong(modifiedV.longValue()).array();
     }
 }
