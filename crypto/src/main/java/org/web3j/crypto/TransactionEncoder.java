@@ -19,12 +19,12 @@ public class TransactionEncoder {
 
     private static final Long CHAIN_ID_INC = Long.valueOf(35);
 
+    @Deprecated
     public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
-        byte[] encodedTransaction = encode(rawTransaction);
-        Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, credentials.getEcKeyPair());
-
-        return encode(rawTransaction, signatureData);
+        throw new UnsupportedOperationException(
+            "Function deprecated. " +
+            "Please use signMessage(RawTransaction rawTransaction, Long chainId, Credentials credentials)."
+        );
     }
 
     public static byte[] signMessage(
@@ -77,26 +77,6 @@ public class TransactionEncoder {
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
             Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
-        return encode(rawTransaction, signatureData);
-    }
-
-    /**
-     * For usage when encoding a transaction without a private key.
-     * @param rawTransaction Transaction to encode.
-     * @param chainId Chain ID for the network.
-     * @param withPrivKey Set this to false if you want to encode a transaction without a private key.
-     * @return RLP-encoded transaction.
-     */
-    public static byte[] encode(RawTransaction rawTransaction, Long chainId, boolean withPrivKey) {
-        if (withPrivKey) {
-            return encode(rawTransaction, chainId);
-        }
-
-        // When encoding a transaction without a private key, 
-        // we use the default chainId 1.
-        final Long V = Long.valueOf(1 + 27);
-        Sign.SignatureData signatureData = new Sign.SignatureData(
-            Bytes.toByteArray(V), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
