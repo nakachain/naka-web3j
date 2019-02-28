@@ -80,6 +80,26 @@ public class TransactionEncoder {
         return encode(rawTransaction, signatureData);
     }
 
+    /**
+     * For usage when encoding a transaction without a private key.
+     * @param rawTransaction Transaction to encode.
+     * @param chainId Chain ID for the network.
+     * @param withPrivKey Set this to false if you want to encode a transaction without a private key.
+     * @return RLP-encoded transaction.
+     */
+    public static byte[] encode(RawTransaction rawTransaction, Long chainId, boolean withPrivKey) {
+        if (withPrivKey) {
+            return encode(rawTransaction, chainId);
+        }
+
+        // When encoding a transaction without a private key, 
+        // we use the default chainId 1.
+        final Long V = Long.valueOf(1 + 27);
+        Sign.SignatureData signatureData = new Sign.SignatureData(
+            Bytes.toByteArray(V), new byte[] {}, new byte[] {});
+        return encode(rawTransaction, signatureData);
+    }
+
     private static byte[] encode(RawTransaction rawTransaction, Sign.SignatureData signatureData) {
         List<RlpType> values = asRlpValues(rawTransaction, signatureData);
         RlpList rlpList = new RlpList(values);

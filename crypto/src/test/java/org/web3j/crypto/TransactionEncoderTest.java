@@ -43,16 +43,15 @@ public class TransactionEncoderTest {
 //         assertThat(rlpStrings.get(3), is(RlpString.create("")));
 //     }
 
-//     @Test
-//     public void testEip155Encode() {
-//         assertThat(TransactionEncoder.encode(createEip155RawTransaction(), Long.valueOf(1)),
-//                 is(Numeric.hexStringToByteArray(
-//                         "0xec098504a817c800825208943535353535353535353535353535"
-//                         + "353535353535880de0b6b3a764000080018080")));
-//     }
+    @Test
+    public void testEip155Encode() {
+        assertThat(
+                TransactionEncoder.encode(createEip155RawTransaction(), Long.valueOf(2018), false),
+                is(Numeric.hexStringToByteArray("0xef098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a7640000808080801c8080"))
+        );
+    }
 
     @Test
-    // https://github.com/ethereum/EIPs/issues/155
     public void testEip155Transaction() {
         assertThat(
                 TransactionEncoder.signMessage(createEip155RawTransaction(), Long.valueOf(2018), SampleKeys.CREDENTIALS),
