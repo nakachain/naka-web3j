@@ -1,7 +1,6 @@
 package org.web3j.crypto;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,9 +55,8 @@ public class TransactionEncoder {
     }
 
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
-        byte[] v = ByteBuffer.allocate(Long.BYTES).putLong(chainId.longValue()).array();
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                v, new byte[] {}, new byte[] {});
+            Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
         System.out.println("VRS first");
         System.out.println("V " + Numeric.toHexString(signatureData.getV()));
         System.out.println("R " + Numeric.toHexString(signatureData.getR()));
@@ -128,6 +126,6 @@ public class TransactionEncoder {
 
     private static byte[] getEIP155V(Long chainId) {
         Long modifiedV = (chainId * 2) + 36;
-        return ByteBuffer.allocate(Long.BYTES).putLong(modifiedV.longValue()).array();
+        return Bytes.toByteArray(modifiedV);
     }
 }
