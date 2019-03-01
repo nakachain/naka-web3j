@@ -8,18 +8,14 @@ import static org.web3j.crypto.TransactionUtils.generateTransactionHashHexEncode
 
 public class TransactionUtilsTest {
 
-    // @Test
-    // public void testGenerateTransactionHash() {
-    //     assertThat(generateTransactionHashHexEncoded(
-    //             TransactionEncoderTest.createContractTransaction(), SampleKeys.CREDENTIALS),
-    //             is("0xc3a0f520404c8cd0cb1c98be6b8e17ee32bf134ac1697d078e90422525c2d902"));
-    // }
-
-    // @Test
-    // public void testGenerateEip155TransactionHash() {
-    //     assertThat(generateTransactionHashHexEncoded(
-    //             TransactionEncoderTest.createContractTransaction(), Long.valueOf(1),
-    //             SampleKeys.CREDENTIALS),
-    //             is("0x568c7f6920c1cee8332e245c473657b9c53044eb96ed7532f5550f1139861e9e"));
-    // }
+    @Test
+    public void testGenerateEip155TransactionHash() {
+        assertThat(
+                generateTransactionHashHexEncoded(
+                        TransactionEncoderTest.createContractTransaction(), 
+                        Long.valueOf(1),
+                        SampleKeys.CREDENTIALS),
+                is("0x0594898cce4e5987f6b4057ad2bcb7c52a2114f77c9d53de0061404261f796c2")
+        );
+    }
 }
