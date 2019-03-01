@@ -63,8 +63,11 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
+    @Deprecated
     public RawTransactionManager(Web3j web3j, Credentials credentials) {
         this(web3j, credentials, ChainId.NONE);
+        throw new UnsupportedOperationException(
+                "Please use the other RawTransactionManager constructors.");
     }
 
     public RawTransactionManager(
