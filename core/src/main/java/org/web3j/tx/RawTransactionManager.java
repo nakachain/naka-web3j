@@ -28,7 +28,6 @@ public class RawTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
     final Credentials credentials;
-
     private final Long chainId;
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
@@ -36,10 +35,8 @@ public class RawTransactionManager extends TransactionManager {
     public RawTransactionManager(Web3j web3j, Credentials credentials, 
             Long chainId) {
         super(web3j, credentials.getAddress());
-
         this.web3j = web3j;
         this.credentials = credentials;
-
         this.chainId = chainId;
     }
 
@@ -47,26 +44,17 @@ public class RawTransactionManager extends TransactionManager {
             Long chainId, 
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
-
         this.web3j = web3j;
         this.credentials = credentials;
-
         this.chainId = chainId;
     }
 
     public RawTransactionManager(Web3j web3j, Credentials credentials, 
             Long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
-
         this.web3j = web3j;
         this.credentials = credentials;
-
         this.chainId = chainId;
-    }
-
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
-        this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
 
     protected BigInteger getNonce() throws IOException {
@@ -104,13 +92,8 @@ public class RawTransactionManager extends TransactionManager {
      * @return The transaction signed and encoded without ever broadcasting it
      */
     public String sign(RawTransaction rawTransaction) {
-        byte[] signedMessage;
-        if (!chainId.equals(ChainId.NONE)) {
-            signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
-        } else {
-            signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-        }
-
+        final byte[] signedMessage = TransactionEncoder.signMessage(
+                rawTransaction, chainId, credentials);
         return Numeric.toHexString(signedMessage);
     }
 

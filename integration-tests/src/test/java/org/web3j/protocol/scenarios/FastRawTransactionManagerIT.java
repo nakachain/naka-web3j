@@ -41,7 +41,7 @@ public class FastRawTransactionManagerIT extends Scenario {
 
         List<Future<TransactionReceipt>> transactionReceipts = new LinkedList<>();
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                web3j, ALICE,
+                web3j, ALICE, Long.valueOf(1),
                 new PollingTransactionReceiptProcessor(
                         web3j, POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH));
 
@@ -83,7 +83,7 @@ public class FastRawTransactionManagerIT extends Scenario {
                 new ConcurrentLinkedQueue<>();
 
         FastRawTransactionManager transactionManager = new FastRawTransactionManager(
-                web3j, ALICE,
+                web3j, ALICE, Long.valueOf(1),
                 new QueuingTransactionReceiptProcessor(web3j, new Callback() {
                     @Override
                     public void accept(TransactionReceipt transactionReceipt) {

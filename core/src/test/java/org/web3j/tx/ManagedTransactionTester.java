@@ -35,14 +35,16 @@ public abstract class ManagedTransactionTester {
         when(txHashVerifier.verify(any(), any())).thenReturn(true);
     }
 
+    // TODO: pass in chain id?
     public TransactionManager getVerifiedTransactionManager(Credentials credentials,
                                                             int attempts, int sleepDuration) {
-        RawTransactionManager transactionManager =
-                new RawTransactionManager(web3j, credentials, attempts, sleepDuration);
+        RawTransactionManager transactionManager = new RawTransactionManager(
+                web3j, credentials, Long.valueOf(1), attempts, sleepDuration);
         transactionManager.setTxHashVerifier(txHashVerifier);
         return transactionManager;
     }
 
+    // TODO: pass in chain id?
     public TransactionManager getVerifiedTransactionManager(Credentials credentials) {
         RawTransactionManager transactionManager = new RawTransactionManager(
                 web3j, credentials, Long.valueOf(1));
