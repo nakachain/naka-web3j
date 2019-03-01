@@ -15,4 +15,6 @@ public class ChainId {
     public static final Long KOVAN = Long.valueOf(42);
     public static final Long ETHEREUM_CLASSIC_MAINNET = Long.valueOf(61);
     public static final Long ETHEREUM_CLASSIC_TESTNET = Long.valueOf(62);
+    public static final Long NAKA_TESTNET = Long.valueOf(2018);
+    public static final Long NAKA_MAINNET = Long.valueOf(2019);
 }
