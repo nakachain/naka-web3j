@@ -22,7 +22,7 @@ public class SignTest {
                 SampleKeys.KEY_PAIR);
 
         Sign.SignatureData expected = new Sign.SignatureData(
-                (byte) 28,
+                new byte[]{28},
                 Numeric.hexStringToByteArray(
                         "0x0464eee9e2fe1a10ffe48c78b80de1ed8dcf996f3f60955cb2e03cb21903d930"),
                 Numeric.hexStringToByteArray(
@@ -49,7 +49,7 @@ public class SignTest {
     @Test(expected = RuntimeException.class)
     public void testInvalidSignature() throws SignatureException {
         Sign.signedMessageToKey(
-                TEST_MESSAGE, new Sign.SignatureData((byte) 27, new byte[]{1}, new byte[]{0}));
+                TEST_MESSAGE, new Sign.SignatureData(new byte[]{27}, new byte[]{1}, new byte[]{0}));
     }
 
     @Test

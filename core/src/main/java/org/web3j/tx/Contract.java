@@ -71,12 +71,13 @@ public abstract class Contract extends ManagedTransaction {
         this.gasProvider = gasProvider;
     }
 
+    // TODO: add chainId as param
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, Credentials credentials,
                        ContractGasProvider gasProvider) {
 
         this(contractBinary, contractAddress, web3j,
-                new RawTransactionManager(web3j, credentials),
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasProvider);
     }
 
@@ -88,11 +89,13 @@ public abstract class Contract extends ManagedTransaction {
                 new StaticGasProvider(gasPrice, gasLimit));
     }
 
+    // TODO: add chainId as param
     @Deprecated
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this(contractBinary, contractAddress, web3j, 
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasPrice, gasLimit);
     }
 
@@ -103,11 +106,13 @@ public abstract class Contract extends ManagedTransaction {
         this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
+    // TODO: add chainId as param
     @Deprecated
     protected Contract(String contractAddress,
                        Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this("", contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this("", contractAddress, web3j, 
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasPrice, gasLimit);
     }
 
@@ -272,7 +277,8 @@ public abstract class Contract extends ManagedTransaction {
     private TransactionReceipt executeTransaction(
             Function function, BigInteger weiValue)
             throws IOException, TransactionException {
-        return executeTransaction(FunctionEncoder.encode(function), weiValue, function.getName());
+        return executeTransaction(FunctionEncoder.encode(function), weiValue, 
+                function.getName());
     }
 
     /**
@@ -290,7 +296,7 @@ public abstract class Contract extends ManagedTransaction {
 
         TransactionReceipt receipt = send(contractAddress, data, weiValue,
                 gasProvider.getGasPrice(funcName),
-                gasProvider.getGasLimit(funcName));
+                gasProvider.getGasLimit(funcName), null, null, null);
 
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
@@ -317,7 +323,8 @@ public abstract class Contract extends ManagedTransaction {
         return new RemoteCall<>(() -> executeCallMultipleValueReturn(function));
     }
 
-    protected RemoteCall<TransactionReceipt> executeRemoteCallTransaction(Function function) {
+    protected RemoteCall<TransactionReceipt> executeRemoteCallTransaction(
+            Function function) {
         return new RemoteCall<>(() -> executeTransaction(function));
     }
 
@@ -327,10 +334,12 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     private static <T extends Contract> T create(
-            T contract, String binary, String encodedConstructor, BigInteger value)
+            T contract, String binary, String encodedConstructor, 
+            BigInteger value)
             throws IOException, TransactionException {
         TransactionReceipt transactionReceipt =
-                contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY);
+                contract.executeTransaction(binary + encodedConstructor, value, 
+                FUNC_DEPLOY);
 
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {

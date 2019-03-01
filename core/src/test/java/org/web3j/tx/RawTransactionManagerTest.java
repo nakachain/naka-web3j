@@ -2,10 +2,8 @@ package org.web3j.tx;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import org.web3j.crypto.Credentials;
 import org.web3j.crypto.SampleKeys;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.exceptions.TxHashMismatchException;
@@ -18,9 +16,10 @@ public class RawTransactionManagerTest extends ManagedTransactionTester {
         TransactionReceipt transactionReceipt = prepareTransfer();
         prepareTransaction(transactionReceipt);
 
-        TransactionManager transactionManager =
-                new RawTransactionManager(web3j, SampleKeys.CREDENTIALS);
+        TransactionManager transactionManager = new RawTransactionManager(
+                web3j, SampleKeys.CREDENTIALS, Long.valueOf(1));
         Transfer transfer = new Transfer(web3j, transactionManager);
-        transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER).send();
+        transfer.sendFunds(ADDRESS, BigDecimal.ONE, Convert.Unit.ETHER, null, 
+                null, null).send();
     }
 }

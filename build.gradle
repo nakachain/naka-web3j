@@ -47,7 +47,7 @@ apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
-description 'web3j base project'
+description 'naka-web3j base project'
 
 allprojects {
 
@@ -91,6 +91,7 @@ allprojects {
     checkstyle {
         toolVersion = "7.7"
         configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+        checkstyleTest.enabled = false
     }
 }
 
@@ -131,6 +132,10 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
         archives sourcesJar, javadocJar, testJar
     }
 
+    signing {
+        sign configurations.archives
+    }
+
     ext {
         ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('OSSRH_USERNAME')
         ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
@@ -162,7 +167,7 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                 pom {
                     name = project.name
                     description = project.description
-                    url = "https://github.com/web3j/web3j"
+                    url = "https://github.com/nakachain/naka-web3j"
                     licenses {
                         license {
                             name = "The Apache License, Version 2.0"
@@ -172,15 +177,15 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     }
                     developers {
                         developer {
-                            id = "conor10"
-                            name = "Conor Svensson"
-                            email = "conor10@gmail.com"
+                            id = "dwalintukan"
+                            name = "Deric Walintukan"
+                            email = "deric@nakachain.org"
                         }
                     }
                     scm {
-                        connection = "scm:git:https://github.com/web3j/web3j.git"
-                        developerConnection = "scm:git://github.com/web3j/web3j.git"
-                        url = "https://github.com/web3j/web3j.git"
+                        connection = "scm:git:https://github.com/nakachain/naka-web3j.git"
+                        developerConnection = "scm:git://github.com/nakachain/naka-web3j.git"
+                        url = "https://github.com/nakachain/naka-web3j.git"
                     }
                 }
             }
@@ -204,16 +209,23 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
                     )
                 }
 
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(
+                            userName: ossrhUsername, 
+                            password: ossrhPassword
+                    )
+                }
+
                 pom.project {
-                    name 'web3j'
+                    name 'naka-web3j'
                     packaging 'jar'
                     description project.description
-                    url 'https://web3j.io'
+                    url 'https://nakachain.org'
 
                     scm {
-                        connection 'scm:git:https://github.com/web3j/web3j.git'
-                        url 'https://github.com/web3j/web3j.git'
-                        developerConnection 'scm:git://github.com/web3j/web3j.git'
+                        connection 'scm:git:https://github.com/nakachain/naka-web3j.git'
+                        developerConnection 'scm:git://github.com/nakachain/naka-web3j.git'
+                        url 'https://github.com/nakachain/naka-web3j.git'
                     }
 
                     licenses {
@@ -226,9 +238,9 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
 
                     developers {
                         developer {
-                            id 'conor10'
-                            name 'Conor Svensson'
-                            email 'conor10@gmail.com'
+                            id = "dwalintukan"
+                            name = "Deric Walintukan"
+                            email = "deric@nakachain.org"
                         }
                     }
                 }
@@ -247,9 +259,9 @@ configure(subprojects.findAll { it.name != 'integration-tests' }) {
             desc = project.description
             userOrg = 'web3j'
             licenses = ['Apache-2.0']
-            issueTrackerUrl = 'https://github.com/web3j/web3j/issues'
-            vcsUrl = 'https://github.com/web3j/web3j.git'
-            websiteUrl = 'https://web3j.io'
+            issueTrackerUrl = 'https://github.com/nakachain/naka-web3j/issues'
+            vcsUrl = 'https://github.com/nakachain/naka-web3j.git'
+            websiteUrl = 'https://nakachain.org'
             publicDownloadNumbers = true
 
             version {

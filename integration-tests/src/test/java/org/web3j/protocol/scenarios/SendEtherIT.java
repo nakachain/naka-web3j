@@ -28,7 +28,8 @@ public class SendEtherIT extends Scenario {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         Transaction transaction = Transaction.createEtherTransaction(
-                ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, BOB.getAddress(), value);
+                ALICE.getAddress(), nonce, GAS_PRICE, GAS_LIMIT, 
+                BOB.getAddress(), value, null, null, null);
 
         EthSendTransaction ethSendTransaction =
                 web3j.ethSendTransaction(transaction).sendAsync().get();
@@ -66,7 +67,8 @@ public class SendEtherIT extends Scenario {
     @Test
     public void testTransfer() throws Exception {
         TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                web3j, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), Convert.Unit.ETHER)
+                web3j, ALICE, Long.valueOf(1), BOB.getAddress(), 
+                BigDecimal.valueOf(0.2), Convert.Unit.ETHER, null, null, null)
                 .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }

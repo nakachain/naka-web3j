@@ -22,13 +22,16 @@ import static org.junit.Assert.assertThat;
  */
 public class CreateRawTransactionIT extends Scenario {
 
+    private static final Long CHAIN_ID = Long.valueOf(2018);
+
     @Test
     public void testTransferEther() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createEtherTransaction(
                 nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -48,7 +51,8 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -70,13 +74,14 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger value = Convert.toWei("0.5", Convert.Unit.ETHER).toBigInteger();
 
         return RawTransaction.createEtherTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value);
+                nonce, GAS_PRICE, GAS_LIMIT, toAddress, value, null, null, null);
     }
 
     private static RawTransaction createSmartContractTransaction(BigInteger nonce)
             throws Exception {
         return RawTransaction.createContractTransaction(
-                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, getFibonacciSolidityBinary());
+                nonce, GAS_PRICE, GAS_LIMIT, BigInteger.ZERO, 
+                getFibonacciSolidityBinary(), null, null, null);
     }
 
     BigInteger getNonce(String address) throws Exception {

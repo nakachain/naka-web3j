@@ -79,10 +79,10 @@ public class Sign {
                     "Could not construct a recoverable key. Are your credentials valid?");
         }
 
-        int headerByte = recId + 27;
+        Integer headerByte = recId + 27;
 
         // 1 header + 32 bytes for R + 32 bytes for S
-        byte v = (byte) headerByte;
+        byte[] v = new byte[]{headerByte.byteValue()};
         byte[] r = Numeric.toBytesPadded(sig.r, 32);
         byte[] s = Numeric.toBytesPadded(sig.s, 32);
 
@@ -211,15 +211,14 @@ public class Sign {
 
     static BigInteger signedMessageHashToKey(
             byte[] messageHash, SignatureData signatureData) throws SignatureException {
-
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
         verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
         verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
 
-        int header = signatureData.getV() & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
+        int header = Numeric.toInt(signatureData.getV());
         if (header < 27 || header > 34) {
             throw new SignatureException("Header byte out of range: " + header);
         }
@@ -277,17 +276,17 @@ public class Sign {
     }
 
     public static class SignatureData {
-        private final byte v;
+        private final byte[] v;
         private final byte[] r;
         private final byte[] s;
 
-        public SignatureData(byte v, byte[] r, byte[] s) {
+        public SignatureData(byte[] v, byte[] r, byte[] s) {
             this.v = v;
             this.r = r;
             this.s = s;
         }
 
-        public byte getV() {
+        public byte[] getV() {
             return v;
         }
 
@@ -310,7 +309,7 @@ public class Sign {
 
             SignatureData that = (SignatureData) o;
 
-            if (v != that.v) {
+            if (!Arrays.equals(v, that.v)) {
                 return false;
             }
             if (!Arrays.equals(r, that.r)) {
@@ -321,7 +320,7 @@ public class Sign {
 
         @Override
         public int hashCode() {
-            int result = (int) v;
+            int result = Arrays.hashCode(v);
             result = 31 * result + Arrays.hashCode(r);
             result = 31 * result + Arrays.hashCode(s);
             return result;

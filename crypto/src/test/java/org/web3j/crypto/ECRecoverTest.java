@@ -34,7 +34,7 @@ public class ECRecoverTest {
         }
            
         SignatureData sd = new SignatureData(
-                v, 
+                new byte[]{v}, 
                 (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32), 
                 (byte[]) Arrays.copyOfRange(signatureBytes, 32, 64));
 

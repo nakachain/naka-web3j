@@ -1,5 +1,6 @@
 package org.web3j.utils;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
@@ -21,5 +22,9 @@ public class Bytes {
 
     public static byte[] trimLeadingZeroes(byte[] bytes) {
         return trimLeadingBytes(bytes, (byte) 0);
+    }
+
+    public static byte[] toByteArray(Long value) {
+        return ByteBuffer.allocate(Long.BYTES).putLong(value.longValue()).array();
     }
 }

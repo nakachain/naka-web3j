@@ -42,6 +42,8 @@ import static org.junit.Assert.assertThat;
  */
 public class HumanStandardTokenIT extends Scenario {
 
+    private static final Long CHAIN_ID = Long.valueOf(2018);
+
     @Test
     public void testContract() throws Exception {
 
@@ -162,9 +164,13 @@ public class HumanStandardTokenIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 BigInteger.ZERO,
-                getHumanStandardTokenBinary() + encodedConstructor);
+                getHumanStandardTokenBinary() + encodedConstructor, 
+                null, 
+                null, 
+                null);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)
@@ -283,9 +289,13 @@ public class HumanStandardTokenIT extends Scenario {
                 GAS_PRICE,
                 GAS_LIMIT,
                 contractAddress,
-                encodedFunction);
+                encodedFunction, 
+                null, 
+                null, 
+                null);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, credentials);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue)

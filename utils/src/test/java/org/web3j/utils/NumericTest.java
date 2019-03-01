@@ -2,6 +2,7 @@ package org.web3j.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -230,5 +231,23 @@ public class NumericTest {
     public void testHandleNPE() {
         assertFalse(Numeric.containsHexPrefix(null));
         assertFalse(Numeric.containsHexPrefix(""));
+    }
+
+    @Test
+    public void testToLong() {
+        byte[] b = ByteBuffer.allocate(Long.BYTES).putLong(Long.MAX_VALUE).array();
+        assertThat(Numeric.toLong(b), is(Long.MAX_VALUE));
+
+        b = ByteBuffer.allocate(Long.BYTES).putLong(Long.MIN_VALUE).array();
+        assertThat(Numeric.toLong(b), is(Long.MIN_VALUE));
+    }
+
+    @Test
+    public void testToInt() {
+        byte[] b = ByteBuffer.allocate(Integer.BYTES).putInt(Integer.MAX_VALUE).array();
+        assertThat(Numeric.toInt(b), is(Integer.MAX_VALUE));
+
+        b = ByteBuffer.allocate(Integer.BYTES).putInt(Integer.MIN_VALUE).array();
+        assertThat(Numeric.toInt(b), is(Integer.MIN_VALUE));
     }
 }

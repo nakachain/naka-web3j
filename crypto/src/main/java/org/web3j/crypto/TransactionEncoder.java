@@ -1,5 +1,6 @@
 package org.web3j.crypto;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,39 +17,58 @@ import org.web3j.utils.Numeric;
  */
 public class TransactionEncoder {
 
-    public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
-        byte[] encodedTransaction = encode(rawTransaction);
-        Sign.SignatureData signatureData = Sign.signMessage(
-                encodedTransaction, credentials.getEcKeyPair());
-
-        return encode(rawTransaction, signatureData);
-    }
+    private static final Long CHAIN_ID_INC = Long.valueOf(35);
 
     public static byte[] signMessage(
-            RawTransaction rawTransaction, byte chainId, Credentials credentials) {
+            RawTransaction rawTransaction, Long chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
         Sign.SignatureData signatureData = Sign.signMessage(
                 encodedTransaction, credentials.getEcKeyPair());
-
-        Sign.SignatureData eip155SignatureData = createEip155SignatureData(signatureData, chainId);
+        Sign.SignatureData eip155SignatureData = createEip155SignatureData(
+                encodedTransaction, signatureData, 
+                credentials.getEcKeyPair().getPublicKey(), chainId);
         return encode(rawTransaction, eip155SignatureData);
     }
 
+    // Modifies V value based on EIP155 specs
+    // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
+    // https://github.com/ethereum/go-ethereum/blob/938cf4528ab5acbb6013be79a0548956713807a8/crypto/secp256k1/libsecp256k1/src/ecdsa_impl.h#L294
     public static Sign.SignatureData createEip155SignatureData(
-            Sign.SignatureData signatureData, byte chainId) {
-        byte v = (byte) (signatureData.getV() + (chainId << 1) + 8);
+            byte[] encodedTransaction, Sign.SignatureData sigData, 
+            BigInteger pubKey, Long chainId) {
 
-        return new Sign.SignatureData(
-                v, signatureData.getR(), signatureData.getS());
+        // Get recovery param so we know what to increment V by
+        int recId = -1;
+        for (int i = 0; i < 4; i++) {
+            BigInteger k = Sign.recoverFromSignature(
+                    i, 
+                    new ECDSASignature(new BigInteger(1, sigData.getR()), 
+                            new BigInteger(1, sigData.getS())), 
+                    Hash.sha3(encodedTransaction));
+
+            if (k != null && k.equals(pubKey)) {
+                recId = i;
+                break;
+            }
+        }
+        if (recId == -1) {
+            throw new RuntimeException("Could not construct EIP155 signature.");
+        }
+
+        // Modify V for replay attack protection
+        final Long modifiedV = (chainId * 2) + CHAIN_ID_INC + recId;
+        final byte[] v = Bytes.toByteArray(modifiedV);
+
+        return new Sign.SignatureData(v, sigData.getR(), sigData.getS());
     }
 
     public static byte[] encode(RawTransaction rawTransaction) {
-        return encode(rawTransaction, null);
+        return encode(rawTransaction, (Sign.SignatureData) null);
     }
 
-    public static byte[] encode(RawTransaction rawTransaction, byte chainId) {
+    public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
-                chainId, new byte[] {}, new byte[] {});
+                Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
@@ -82,8 +102,29 @@ public class TransactionEncoder {
         byte[] data = Numeric.hexStringToByteArray(rawTransaction.getData());
         result.add(RlpString.create(data));
 
+        String token = rawTransaction.getToken();
+        if (token != null && token.length() > 0) {
+            result.add(RlpString.create(Numeric.hexStringToByteArray(token)));
+        } else {
+            result.add(RlpString.create(""));
+        }
+
+        String exchanger = rawTransaction.getExchanger();
+        if (exchanger != null && exchanger.length() > 0) {
+            result.add(RlpString.create(Numeric.hexStringToByteArray(exchanger)));
+        } else {
+            result.add(RlpString.create(""));
+        }
+
+        BigInteger exchangeRate = rawTransaction.getExchangeRate();
+        if (exchangeRate != null && exchangeRate.compareTo(BigInteger.ZERO) > 0) {
+            result.add(RlpString.create(rawTransaction.getValue()));
+        } else {
+            result.add(RlpString.create(BigInteger.ZERO));
+        }
+
         if (signatureData != null) {
-            result.add(RlpString.create(signatureData.getV()));
+            result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getV())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getR())));
             result.add(RlpString.create(Bytes.trimLeadingZeroes(signatureData.getS())));
         }

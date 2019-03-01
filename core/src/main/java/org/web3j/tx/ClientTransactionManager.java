@@ -39,11 +39,13 @@ public class ClientTransactionManager extends TransactionManager {
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to,
-            String data, BigInteger value)
+            String data, BigInteger value, String token, String exchanger, 
+            BigInteger exchangeRate)
             throws IOException {
 
         Transaction transaction = new Transaction(
-                getFromAddress(), null, gasPrice, gasLimit, to, value, data);
+                getFromAddress(), null, gasPrice, gasLimit, to, value, data, 
+                token, exchanger, exchangeRate);
 
         return web3j.ethSendTransaction(transaction)
                 .send();

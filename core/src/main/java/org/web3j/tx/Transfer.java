@@ -41,18 +41,21 @@ public class Transfer extends ManagedTransaction {
      *                              while waiting
      * @throws TransactionException if the transaction was not mined while waiting
      */
-    private TransactionReceipt send(String toAddress, BigDecimal value, Convert.Unit unit)
-            throws IOException, InterruptedException,
-            TransactionException {
+    private TransactionReceipt send(String toAddress, BigDecimal value, 
+            Convert.Unit unit, String token, String exchanger, 
+            BigInteger exchangeRate)
+            throws IOException, InterruptedException, TransactionException {
 
         BigInteger gasPrice = requestCurrentGasPrice();
-        return send(toAddress, value, unit, gasPrice, GAS_LIMIT);
+        return send(toAddress, value, unit, gasPrice, GAS_LIMIT, token, 
+                exchanger, exchangeRate);
     }
 
     private TransactionReceipt send(
-            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
-            BigInteger gasLimit) throws IOException, InterruptedException,
-            TransactionException {
+            String toAddress, BigDecimal value, Convert.Unit unit, 
+            BigInteger gasPrice, BigInteger gasLimit, String token, 
+            String exchanger, BigInteger exchangeRate) 
+            throws IOException, InterruptedException, TransactionException {
 
         BigDecimal weiValue = Convert.toWei(value, unit);
         if (!Numeric.isIntegerValue(weiValue)) {
@@ -62,18 +65,22 @@ public class Transfer extends ManagedTransaction {
         }
 
         String resolvedAddress = ensResolver.resolve(toAddress);
-        return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, gasLimit);
+        return send(resolvedAddress, "", weiValue.toBigIntegerExact(), gasPrice, 
+                gasLimit, token, exchanger, exchangeRate);
     }
 
     public static RemoteCall<TransactionReceipt> sendFunds(
-            Web3j web3j, Credentials credentials,
-            String toAddress, BigDecimal value, Convert.Unit unit) throws InterruptedException,
-            IOException, TransactionException {
+            Web3j web3j, Credentials credentials, Long chainId,
+            String toAddress, BigDecimal value, Convert.Unit unit, 
+            String token, String exchanger, BigInteger exchangeRate) 
+            throws InterruptedException, IOException, TransactionException {
 
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        TransactionManager transactionManager = new RawTransactionManager(
+                web3j, credentials, chainId);
 
         return new RemoteCall<>(() ->
-                new Transfer(web3j, transactionManager).send(toAddress, value, unit));
+                new Transfer(web3j, transactionManager).send(toAddress, value, 
+                unit, token, exchanger, exchangeRate));
     }
 
     /**
@@ -83,17 +90,24 @@ public class Transfer extends ManagedTransaction {
      * @param toAddress destination address
      * @param value amount to send
      * @param unit of specified send
+     * @param token Pay-By-Token token to pay for gas fee
+     * @param exchanger Pay-By-Token exchanger who will accept token and pay for gas fee
+     * @param exchangeRate Pay-By-Token exchange rate of the token to native
      *
      * @return {@link RemoteCall} containing executing transaction
      */
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress, BigDecimal value, Convert.Unit unit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit));
+            String toAddress, BigDecimal value, Convert.Unit unit, String token, 
+            String exchanger, BigInteger exchangeRate) {
+        return new RemoteCall<>(() -> send(toAddress, value, unit, token, 
+                exchanger, exchangeRate));
     }
 
     public RemoteCall<TransactionReceipt> sendFunds(
-            String toAddress, BigDecimal value, Convert.Unit unit, BigInteger gasPrice,
-            BigInteger gasLimit) {
-        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, gasLimit));
+            String toAddress, BigDecimal value, Convert.Unit unit, 
+            BigInteger gasPrice, BigInteger gasLimit, String token, 
+            String exchanger, BigInteger exchangeRate) {
+        return new RemoteCall<>(() -> send(toAddress, value, unit, gasPrice, 
+                gasLimit, token, exchanger, exchangeRate));
     }
 }

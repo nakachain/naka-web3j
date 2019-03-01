@@ -81,10 +81,12 @@ public abstract class ManagedTransaction {
     }
 
     protected TransactionReceipt send(
-            String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
+            String to, String data, BigInteger value, BigInteger gasPrice, 
+            BigInteger gasLimit, String token, String exchanger, 
+            BigInteger exchangeRate)
             throws IOException, TransactionException {
 
         return transactionManager.executeTransaction(
-                gasPrice, gasLimit, to, data, value);
+                gasPrice, gasLimit, to, data, value, token, exchanger, exchangeRate);
     }
 }
