@@ -211,15 +211,14 @@ public class Sign {
 
     static BigInteger signedMessageHashToKey(
             byte[] messageHash, SignatureData signatureData) throws SignatureException {
-
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
         verifyPrecondition(r != null && r.length == 32, "r must be 32 bytes");
         verifyPrecondition(s != null && s.length == 32, "s must be 32 bytes");
 
-        int header = signatureData.getV()[0] & 0xFF;
         // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
         //                  0x1D = second key with even y, 0x1E = second key with odd y
+        int header = Numeric.toInt(signatureData.getV());
         if (header < 27 || header > 34) {
             throw new SignatureException("Header byte out of range: " + header);
         }

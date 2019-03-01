@@ -2,12 +2,14 @@ package org.web3j.crypto;
 
 import java.math.BigInteger;
 import java.security.SignatureException;
-import java.util.Arrays;
+
+import org.web3j.utils.Bytes;
+import org.web3j.utils.Numeric;
 
 public class SignedRawTransaction extends RawTransaction {
 
-    private static final int CHAIN_ID_INC = 35;
-    private static final int LOWER_REAL_V = 27;
+    private static final long CHAIN_ID_INC = 35;
+    private static final long LOWER_REAL_V = 27;
 
     private Sign.SignatureData signatureData;
 
@@ -25,12 +27,11 @@ public class SignedRawTransaction extends RawTransaction {
     }
 
     public Long getChainId() {
-        Integer v = Arrays.hashCode(signatureData.getV());
+        final long v = Numeric.toLong(signatureData.getV());
         if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
             return null;
         }
-        Integer chainId = (v - CHAIN_ID_INC) / 2;
-        return Long.valueOf(chainId);
+        return Long.valueOf((v - CHAIN_ID_INC) / 2);
     }
 
     public String getFrom() throws SignatureException {
@@ -44,8 +45,10 @@ public class SignedRawTransaction extends RawTransaction {
         byte[] v = signatureData.getV();
         byte[] r = signatureData.getR();
         byte[] s = signatureData.getS();
-        Sign.SignatureData signatureDataV = new Sign.SignatureData(v, r, s);
-        BigInteger key = Sign.signedMessageToKey(encodedTransaction, signatureDataV);
+        Sign.SignatureData signatureDataV = new Sign.SignatureData(
+                getRealV(v), r, s);
+        BigInteger key = Sign.signedMessageToKey(
+                encodedTransaction, signatureDataV);
         return "0x" + Keys.getAddress(key);
     }
 
@@ -55,17 +58,19 @@ public class SignedRawTransaction extends RawTransaction {
             throw new SignatureException("from mismatch");
         }
     }
+    
+    private byte[] getRealV(byte[] v) {
+        final long vLong = Numeric.toLong(signatureData.getV());
 
-    // TODO: do we need this anymore after changing the v byte to byte[]?
-    private byte getRealV(byte v) {
-        if (v == LOWER_REAL_V || v == (LOWER_REAL_V + 1)) {
+        if (vLong == LOWER_REAL_V || vLong == (LOWER_REAL_V + 1)) {
             return v;
         }
-        byte realV = LOWER_REAL_V;
+
+        long realV = LOWER_REAL_V;
         int inc = 0;
-        if ((int) v % 2 == 0) {
+        if (vLong % 2 == 0) {
             inc = 1;
         }
-        return (byte) (realV + inc);
+        return Bytes.toByteArray(realV + inc);
     }
 }

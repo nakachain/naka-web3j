@@ -81,6 +81,14 @@ public final class Numeric {
                 && input.charAt(0) == '0' && input.charAt(1) == 'x';
     }
 
+    public static long toLong(byte[] value) {
+        return new BigInteger(value).longValue();
+    }
+
+    public static int toInt(byte[] value) {
+        return new BigInteger(value).intValue();
+    }
+
     public static BigInteger toBigInt(byte[] value, int offset, int length) {
         return toBigInt((Arrays.copyOfRange(value, offset, offset + length)));
     }

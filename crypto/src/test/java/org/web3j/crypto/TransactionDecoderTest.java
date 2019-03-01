@@ -68,34 +68,34 @@ public class TransactionDecoderTest {
     //     assertNull(signedResult.getChainId());
     // }
 
-    // @Test
-    // public void testDecodingSignedChainId() throws Exception {
-    //     BigInteger nonce = BigInteger.ZERO;
-    //     BigInteger gasPrice = BigInteger.ONE;
-    //     BigInteger gasLimit = BigInteger.TEN;
-    //     String to = "0x0add5355";
-    //     BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
-    //     Long chainId = Long.valueOf(1);
-    //     RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-    //             nonce, gasPrice, gasLimit, to, value, null, null, null);
-    //     byte[] signedMessage = TransactionEncoder.signMessage(
-    //             rawTransaction, chainId, SampleKeys.CREDENTIALS);
-    //     String hexMessage = Numeric.toHexString(signedMessage);
+    @Test
+    public void testDecodingSignedChainId() throws Exception {
+        BigInteger nonce = BigInteger.ZERO;
+        BigInteger gasPrice = BigInteger.ONE;
+        BigInteger gasLimit = BigInteger.TEN;
+        String to = "0x0add5355";
+        BigInteger value = BigInteger.valueOf(Long.MAX_VALUE);
+        Long chainId = Long.valueOf(1);
+        RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+                nonce, gasPrice, gasLimit, to, value, null, null, null);
+        byte[] signedMessage = TransactionEncoder.signMessage(
+                rawTransaction, chainId, SampleKeys.CREDENTIALS);
+        String hexMessage = Numeric.toHexString(signedMessage);
 
-    //     RawTransaction result = TransactionDecoder.decode(hexMessage);
-    //     assertNotNull(result);
-    //     assertEquals(nonce, result.getNonce());
-    //     assertEquals(gasPrice, result.getGasPrice());
-    //     assertEquals(gasLimit, result.getGasLimit());
-    //     assertEquals(to, result.getTo());
-    //     assertEquals(value, result.getValue());
-    //     assertEquals("", result.getData());
-    //     assertTrue(result instanceof SignedRawTransaction);
-    //     SignedRawTransaction signedResult = (SignedRawTransaction) result;
-    //     assertEquals(SampleKeys.ADDRESS, signedResult.getFrom());
-    //     signedResult.verify(SampleKeys.ADDRESS);
-    //     assertEquals(chainId, signedResult.getChainId());
-    // }
+        RawTransaction result = TransactionDecoder.decode(hexMessage);
+        assertNotNull(result);
+        assertEquals(nonce, result.getNonce());
+        assertEquals(gasPrice, result.getGasPrice());
+        assertEquals(gasLimit, result.getGasLimit());
+        assertEquals(to, result.getTo());
+        assertEquals(value, result.getValue());
+        assertEquals("", result.getData());
+        assertTrue(result instanceof SignedRawTransaction);
+        SignedRawTransaction signedResult = (SignedRawTransaction) result;
+        assertEquals(SampleKeys.ADDRESS, signedResult.getFrom());
+        signedResult.verify(SampleKeys.ADDRESS);
+        assertEquals(chainId, signedResult.getChainId());
+    }
 
     // @Test
     // public void testRSize31() throws Exception {
