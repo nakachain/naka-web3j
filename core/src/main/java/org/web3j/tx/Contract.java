@@ -71,12 +71,13 @@ public abstract class Contract extends ManagedTransaction {
         this.gasProvider = gasProvider;
     }
 
+    // TODO: add chainId as param
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, Credentials credentials,
                        ContractGasProvider gasProvider) {
 
         this(contractBinary, contractAddress, web3j,
-                new RawTransactionManager(web3j, credentials),
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasProvider);
     }
 
@@ -88,11 +89,13 @@ public abstract class Contract extends ManagedTransaction {
                 new StaticGasProvider(gasPrice, gasLimit));
     }
 
+    // TODO: add chainId as param
     @Deprecated
     protected Contract(String contractBinary, String contractAddress,
                        Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this(contractBinary, contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this(contractBinary, contractAddress, web3j, 
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasPrice, gasLimit);
     }
 
@@ -103,11 +106,13 @@ public abstract class Contract extends ManagedTransaction {
         this("", contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
+    // TODO: add chainId as param
     @Deprecated
     protected Contract(String contractAddress,
                        Web3j web3j, Credentials credentials,
                        BigInteger gasPrice, BigInteger gasLimit) {
-        this("", contractAddress, web3j, new RawTransactionManager(web3j, credentials),
+        this("", contractAddress, web3j, 
+                new RawTransactionManager(web3j, credentials, Long.valueOf(1)),
                 gasPrice, gasLimit);
     }
 

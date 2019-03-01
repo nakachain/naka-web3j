@@ -67,8 +67,8 @@ public class SendEtherIT extends Scenario {
     @Test
     public void testTransfer() throws Exception {
         TransactionReceipt transactionReceipt = Transfer.sendFunds(
-                web3j, ALICE, BOB.getAddress(), BigDecimal.valueOf(0.2), 
-                Convert.Unit.ETHER, null, null, null)
+                web3j, ALICE, Long.valueOf(1), BOB.getAddress(), 
+                BigDecimal.valueOf(0.2), Convert.Unit.ETHER, null, null, null)
                 .send();
         assertFalse(transactionReceipt.getBlockHash().isEmpty());
     }

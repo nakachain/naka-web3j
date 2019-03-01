@@ -70,12 +70,13 @@ public class Transfer extends ManagedTransaction {
     }
 
     public static RemoteCall<TransactionReceipt> sendFunds(
-            Web3j web3j, Credentials credentials,
+            Web3j web3j, Credentials credentials, Long chainId,
             String toAddress, BigDecimal value, Convert.Unit unit, 
             String token, String exchanger, BigInteger exchangeRate) 
             throws InterruptedException, IOException, TransactionException {
 
-        TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        TransactionManager transactionManager = new RawTransactionManager(
+                web3j, credentials, chainId);
 
         return new RemoteCall<>(() ->
                 new Transfer(web3j, transactionManager).send(toAddress, value, 

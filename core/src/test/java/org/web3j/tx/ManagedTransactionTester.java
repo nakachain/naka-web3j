@@ -44,7 +44,8 @@ public abstract class ManagedTransactionTester {
     }
 
     public TransactionManager getVerifiedTransactionManager(Credentials credentials) {
-        RawTransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+        RawTransactionManager transactionManager = new RawTransactionManager(
+                web3j, credentials, Long.valueOf(1));
         transactionManager.setTxHashVerifier(txHashVerifier);
         return transactionManager;
     }

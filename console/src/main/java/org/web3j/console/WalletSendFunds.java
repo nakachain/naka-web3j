@@ -26,6 +26,7 @@ import static org.web3j.codegen.Console.exitError;
 public class WalletSendFunds extends WalletManager {
 
     private static final String USAGE = "send <walletfile> <destination-address>";
+    private static final Long CHAIN_ID = Long.valueOf(1);
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -111,8 +112,8 @@ public class WalletSendFunds extends WalletManager {
         console.printf("Commencing transfer (this may take a few minutes) ");
         try {
             Future<TransactionReceipt> future = Transfer.sendFunds(
-                    web3j, credentials, destinationAddress, amountInWei, 
-                    Convert.Unit.WEI, null, null, null)
+                    web3j, credentials, CHAIN_ID, destinationAddress, 
+                    amountInWei, Convert.Unit.WEI, null, null, null)
                     .sendAsync();
 
             while (!future.isDone()) {

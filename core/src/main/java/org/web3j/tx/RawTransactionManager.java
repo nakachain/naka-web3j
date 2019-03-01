@@ -33,7 +33,8 @@ public class RawTransactionManager extends TransactionManager {
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public RawTransactionManager(Web3j web3j, Credentials credentials, Long chainId) {
+    public RawTransactionManager(Web3j web3j, Credentials credentials, 
+            Long chainId) {
         super(web3j, credentials.getAddress());
 
         this.web3j = web3j;
@@ -42,8 +43,8 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, Long chainId,
+    public RawTransactionManager(Web3j web3j, Credentials credentials, 
+            Long chainId, 
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
@@ -53,21 +54,14 @@ public class RawTransactionManager extends TransactionManager {
         this.chainId = chainId;
     }
 
-    public RawTransactionManager(
-            Web3j web3j, Credentials credentials, Long chainId, int attempts, long sleepDuration) {
+    public RawTransactionManager(Web3j web3j, Credentials credentials, 
+            Long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
         this.credentials = credentials;
 
         this.chainId = chainId;
-    }
-
-    @Deprecated
-    public RawTransactionManager(Web3j web3j, Credentials credentials) {
-        this(web3j, credentials, ChainId.NONE);
-        throw new UnsupportedOperationException(
-                "Please use the other RawTransactionManager constructors.");
     }
 
     public RawTransactionManager(
