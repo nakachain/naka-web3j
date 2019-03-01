@@ -68,7 +68,7 @@ public class TransactionEncoder {
 
     public static byte[] encode(RawTransaction rawTransaction, Long chainId) {
         Sign.SignatureData signatureData = new Sign.SignatureData(
-            Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
+                Bytes.toByteArray(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);
     }
 
