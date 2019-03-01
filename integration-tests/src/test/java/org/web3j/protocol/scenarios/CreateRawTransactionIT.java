@@ -22,13 +22,16 @@ import static org.junit.Assert.assertThat;
  */
 public class CreateRawTransactionIT extends Scenario {
 
+    private static final Long CHAIN_ID = Long.valueOf(2018);
+
     @Test
     public void testTransferEther() throws Exception {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createEtherTransaction(
                 nonce, BOB.getAddress());
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =
@@ -48,7 +51,8 @@ public class CreateRawTransactionIT extends Scenario {
         BigInteger nonce = getNonce(ALICE.getAddress());
         RawTransaction rawTransaction = createSmartContractTransaction(nonce);
 
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ALICE);
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 
+                CHAIN_ID, ALICE);
         String hexValue = Numeric.toHexString(signedMessage);
 
         EthSendTransaction ethSendTransaction =

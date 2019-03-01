@@ -15,11 +15,6 @@ import static org.junit.Assert.assertThat;
 
 public class TransactionEncoderTest {
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testSignMessage() {
-        TransactionEncoder.signMessage(createEtherTransaction(), SampleKeys.CREDENTIALS);
-    }
-
     @Test
     public void testEtherTransactionAsRlpValues() {
         List<RlpType> rlpStrings = TransactionEncoder.asRlpValues(createEtherTransaction(),

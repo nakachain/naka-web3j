@@ -19,14 +19,6 @@ public class TransactionEncoder {
 
     private static final Long CHAIN_ID_INC = Long.valueOf(35);
 
-    @Deprecated
-    public static byte[] signMessage(RawTransaction rawTransaction, Credentials credentials) {
-        throw new UnsupportedOperationException(
-            "Function deprecated. " +
-            "Please use signMessage(RawTransaction rawTransaction, Long chainId, Credentials credentials)."
-        );
-    }
-
     public static byte[] signMessage(
             RawTransaction rawTransaction, Long chainId, Credentials credentials) {
         byte[] encodedTransaction = encode(rawTransaction, chainId);
