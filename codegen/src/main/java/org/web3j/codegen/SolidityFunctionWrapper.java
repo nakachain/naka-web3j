@@ -487,17 +487,20 @@ public class SolidityFunctionWrapper extends Generator {
                 .returns(TypeVariableName.get(className, Type.class))
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName);
+                .addParameter(authType, authName)
+                .addParameter(Long.class, CHAIN_ID);
 
         if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addStatement("return new $L($L, $L, $L, $L)", className,
-                            CONTRACT_ADDRESS, WEB3J, authName, CONTRACT_GAS_PROVIDER);
+                    .addStatement("return new $L($L, $L, $L, $L, $L)", className,
+                            CONTRACT_ADDRESS, WEB3J, authName, CHAIN_ID, 
+                            CONTRACT_GAS_PROVIDER);
         } else {
             toReturn.addParameter(BigInteger.class, GAS_PRICE)
                     .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addStatement("return new $L($L, $L, $L, $L, $L)", className,
-                            CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+                    .addStatement("return new $L($L, $L, $L, $L, $L, $L)", 
+                            className, CONTRACT_ADDRESS, WEB3J, authName, 
+                            CHAIN_ID, GAS_PRICE, GAS_LIMIT)
                     .addAnnotation(Deprecated.class);
         }
 
