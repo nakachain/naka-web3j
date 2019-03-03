@@ -74,6 +74,7 @@ public class SolidityFunctionWrapper extends Generator {
     private static final String TRANSACTION_MANAGER = "transactionManager";
     private static final String INITIAL_VALUE = "initialWeiValue";
     private static final String CONTRACT_ADDRESS = "contractAddress";
+    private static final String CHAIN_ID = "chainId";
     private static final String GAS_PRICE = "gasPrice";
     private static final String GAS_LIMIT = "gasLimit";
     private static final String FILTER = "filter";
@@ -356,17 +357,20 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName);
+                .addParameter(authType, authName)
+                .addParameter(Long.class, CHAIN_ID);
 
         if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
-                    .addStatement("super($N, $N, $N, $N, $N)",
-                            BINARY, CONTRACT_ADDRESS, WEB3J, authName, CONTRACT_GAS_PROVIDER);
+                    .addStatement("super($N, $N, $N, $N, $N, $N)",
+                            BINARY, CONTRACT_ADDRESS, WEB3J, authName, CHAIN_ID,
+                            CONTRACT_GAS_PROVIDER);
         } else {
             toReturn.addParameter(BigInteger.class, GAS_PRICE)
                     .addParameter(BigInteger.class, GAS_LIMIT)
-                    .addStatement("super($N, $N, $N, $N, $N, $N)",
-                            BINARY, CONTRACT_ADDRESS, WEB3J, authName, GAS_PRICE, GAS_LIMIT)
+                    .addStatement("super($N, $N, $N, $N, $N, $N, $N)",
+                            BINARY, CONTRACT_ADDRESS, WEB3J, authName, CHAIN_ID, 
+                            GAS_PRICE, GAS_LIMIT)
                     .addAnnotation(Deprecated.class);
         }
 
