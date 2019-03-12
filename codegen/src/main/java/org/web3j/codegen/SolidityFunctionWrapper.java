@@ -461,10 +461,10 @@ public class SolidityFunctionWrapper extends Generator {
             boolean isPayable, boolean withGasProvider) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("deploy")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(
-                        buildRemoteCall(TypeVariableName.get(className, Type.class)))
+                .returns(buildRemoteCall(TypeVariableName.get(className, Type.class)))
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName);
+                .addParameter(authType, authName)
+                .addParameter(Long.class, CHAIN_ID);
         if (isPayable && !withGasProvider) {
             return builder.addParameter(BigInteger.class, GAS_PRICE)
                     .addParameter(BigInteger.class, GAS_LIMIT)
