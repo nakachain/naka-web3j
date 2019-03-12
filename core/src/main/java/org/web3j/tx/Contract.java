@@ -476,7 +476,7 @@ public abstract class Contract extends ManagedTransaction {
             String encodedConstructor, 
             BigInteger value) {
         return new RemoteCall<>(() -> deploy(
-                type, web3j, credentials, gasPrice, gasLimit, binary,
+                type, web3j, credentials, chainId, gasPrice, gasLimit, binary,
                 encodedConstructor, value));
     }
 
@@ -484,12 +484,13 @@ public abstract class Contract extends ManagedTransaction {
             Class<T> type,
             Web3j web3j, 
             Credentials credentials,
+            Long chainId,
             BigInteger gasPrice, 
             BigInteger gasLimit,
             String binary, 
             String encodedConstructor) {
         return deployRemoteCall(
-                type, web3j, credentials, gasPrice, gasLimit,
+                type, web3j, credentials, chainId, gasPrice, gasLimit,
                 binary, encodedConstructor, BigInteger.ZERO);
     }
 
@@ -497,12 +498,13 @@ public abstract class Contract extends ManagedTransaction {
             Class<T> type,
             Web3j web3j, 
             Credentials credentials,
+            Long chainId,
             ContractGasProvider contractGasProvider,
             String binary, 
             String encodedConstructor, 
             BigInteger value) {
         return new RemoteCall<>(() -> deploy(
-                type, web3j, credentials, contractGasProvider, binary,
+                type, web3j, credentials, chainId, contractGasProvider, binary,
                 encodedConstructor, value));
     }
 
@@ -510,11 +512,12 @@ public abstract class Contract extends ManagedTransaction {
             Class<T> type,
             Web3j web3j, 
             Credentials credentials,
+            Long chainId,
             ContractGasProvider contractGasProvider,
             String binary, 
             String encodedConstructor) {
         return new RemoteCall<>(() -> deploy(
-                type, web3j, credentials, contractGasProvider, binary,
+                type, web3j, credentials, chainId, contractGasProvider, binary,
                 encodedConstructor, BigInteger.ZERO));
     }
 
