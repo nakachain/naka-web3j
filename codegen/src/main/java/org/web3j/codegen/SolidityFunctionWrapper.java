@@ -407,24 +407,26 @@ public class SolidityFunctionWrapper extends Generator {
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         if (isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
-                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
+                    BINARY, INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
         } else if (isPayable && withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall("
-                            + "$L.class, $L, $L, $L, $L, encodedConstructor, $L)",
-                    className, WEB3J, authName, CONTRACT_GAS_PROVIDER, BINARY, INITIAL_VALUE);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
+                    BINARY, INITIAL_VALUE);
         } else if (!isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
-                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, encodedConstructor)",
+                    className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
+                    BINARY);
             methodBuilder.addAnnotation(Deprecated.class);
         } else {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, encodedConstructor)",
-                    className, WEB3J, authName, CONTRACT_GAS_PROVIDER, BINARY);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
+                    className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
+                    BINARY);
         }
 
         return methodBuilder.build();
@@ -435,22 +437,26 @@ public class SolidityFunctionWrapper extends Generator {
             String authName, boolean isPayable, boolean withGasPRovider) {
         if (isPayable && !withGasPRovider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
-                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY, INITIAL_VALUE);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, \"\", $L)",
+                    className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
+                    BINARY, INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
         } else if (isPayable && withGasPRovider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\", $L)",
-                    className, WEB3J, authName, CONTRACT_GAS_PROVIDER, BINARY, INITIAL_VALUE);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\", $L)",
+                    className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
+                    BINARY, INITIAL_VALUE);
         } else if (!isPayable && !withGasPRovider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
-                    className, WEB3J, authName, GAS_PRICE, GAS_LIMIT, BINARY);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, \"\")",
+                    className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
+                    BINARY);
             methodBuilder.addAnnotation(Deprecated.class);
         } else {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, \"\")",
-                    className, WEB3J, authName, CONTRACT_GAS_PROVIDER, BINARY);
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, \"\")",
+                    className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
+                    BINARY);
         }
 
         return methodBuilder.build();
