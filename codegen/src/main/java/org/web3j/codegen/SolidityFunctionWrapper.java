@@ -127,21 +127,25 @@ public class SolidityFunctionWrapper extends Generator {
 
         TypeSpec.Builder classBuilder = createClassBuilder(className, bin);
 
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, false));
-        classBuilder.addMethod(buildConstructor(Credentials.class, CREDENTIALS, true));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class,
-                TRANSACTION_MANAGER, false));
-        classBuilder.addMethod(buildConstructor(TransactionManager.class,
-                TRANSACTION_MANAGER, true));
+        classBuilder.addMethod(buildConstructor(
+                Credentials.class, CREDENTIALS, false));
+        classBuilder.addMethod(buildConstructor(
+                Credentials.class, CREDENTIALS, true));
+        classBuilder.addMethod(buildConstructor(
+                TransactionManager.class, TRANSACTION_MANAGER, false));
+        classBuilder.addMethod(buildConstructor(
+                TransactionManager.class, TRANSACTION_MANAGER, true));
         classBuilder.addFields(buildFuncNameConstants(abi));
         classBuilder.addMethods(
                 buildFunctionDefinitions(className, classBuilder, abi));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, false));
-        classBuilder.addMethod(buildLoad(className, TransactionManager.class,
-                TRANSACTION_MANAGER, false));
-        classBuilder.addMethod(buildLoad(className, Credentials.class, CREDENTIALS, true));
-        classBuilder.addMethod(buildLoad(className, TransactionManager.class,
-                TRANSACTION_MANAGER, true));
+        classBuilder.addMethod(buildLoad(
+                className, Credentials.class, CREDENTIALS, false));
+        classBuilder.addMethod(buildLoad(
+                className, TransactionManager.class, TRANSACTION_MANAGER, false));
+        classBuilder.addMethod(buildLoad(
+                className, Credentials.class, CREDENTIALS, true));
+        classBuilder.addMethod(buildLoad(
+                className, TransactionManager.class, TRANSACTION_MANAGER, true));
         if (!bin.equals(Contract.BIN_NOT_PROVIDED)) {
             classBuilder.addMethods(buildDeployMethods(className, classBuilder, abi));
         }
@@ -357,9 +361,25 @@ public class SolidityFunctionWrapper extends Generator {
                 .addModifiers(Modifier.PROTECTED)
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(Long.class, CHAIN_ID);
+                .addParameter(authType, authName);
 
+        // Only add chainId param if using Credentials for auth type since
+        // TransactionManager already handles the chainId
+        if (authType == Credentials.class) {
+            addCredentialsConstructorParams(toReturn, authName, 
+                    withGasProvider);
+        } else if (authType == TransactionManager.class) {
+            addTransactionManagerConstructorParams(toReturn, authName, 
+                    withGasProvider);
+        }
+
+        return toReturn.build();
+    }
+
+    private static void addCredentialsConstructorParams(
+            MethodSpec.Builder toReturn, String authName, 
+            boolean withGasProvider) {
+        toReturn.addParameter(Long.class, CHAIN_ID);
         if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                     .addStatement("super($N, $N, $N, $N, $N, $N)",
@@ -373,8 +393,24 @@ public class SolidityFunctionWrapper extends Generator {
                             GAS_PRICE, GAS_LIMIT)
                     .addAnnotation(Deprecated.class);
         }
+    }
 
-        return toReturn.build();
+    private static void addTransactionManagerConstructorParams(
+            MethodSpec.Builder toReturn, String authName, 
+            boolean withGasProvider) {
+        if (withGasProvider) {
+            toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
+                    .addStatement("super($N, $N, $N, $N, $N)",
+                            BINARY, CONTRACT_ADDRESS, WEB3J, authName,
+                            CONTRACT_GAS_PROVIDER);
+        } else {
+            toReturn.addParameter(BigInteger.class, GAS_PRICE)
+                    .addParameter(BigInteger.class, GAS_LIMIT)
+                    .addStatement("super($N, $N, $N, $N, $N, $N)",
+                            BINARY, CONTRACT_ADDRESS, WEB3J, authName,  
+                            GAS_PRICE, GAS_LIMIT)
+                    .addAnnotation(Deprecated.class);
+        }
     }
 
     private MethodSpec buildDeploy(
@@ -407,24 +443,28 @@ public class SolidityFunctionWrapper extends Generator {
                 String.class, FunctionEncoder.class, Arrays.class, Type.class, inputParams);
         if (isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L,"
+                            + " encodedConstructor, $L)",
                     className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
                     BINARY, INITIAL_VALUE);
             methodBuilder.addAnnotation(Deprecated.class);
         } else if (isPayable && withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor, $L)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L," 
+                            + " encodedConstructor, $L)",
                     className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
                     BINARY, INITIAL_VALUE);
         } else if (!isPayable && !withGasProvider) {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L, encodedConstructor)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, $L," 
+                            + " encodedConstructor)",
                     className, WEB3J, authName, CHAIN_ID, GAS_PRICE, GAS_LIMIT, 
                     BINARY);
             methodBuilder.addAnnotation(Deprecated.class);
         } else {
             methodBuilder.addStatement(
-                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L, encodedConstructor)",
+                    "return deployRemoteCall($L.class, $L, $L, $L, $L, $L," 
+                            + " encodedConstructor)",
                     className, WEB3J, authName, CHAIN_ID, CONTRACT_GAS_PROVIDER, 
                     BINARY);
         }

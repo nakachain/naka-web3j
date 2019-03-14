@@ -63,6 +63,7 @@ import static org.mockito.Mockito.when;
 
 public class ContractTest extends ManagedTransactionTester {
 
+    private static final Long TEST_CONTRACT_CHAIN_ID = Long.valueOf(1);
     private static final String TEST_CONTRACT_BINARY = "12345";
 
     private TestContract contract;
@@ -163,9 +164,10 @@ public class ContractTest extends ManagedTransactionTester {
 
         try {
             TestContract.deployRemoteCall(
-                    TestContract.class, web3j, SampleKeys.CREDENTIALS,
-                    ManagedTransaction.GAS_PRICE, Contract.GAS_LIMIT,
-                    "0xcafed00d", encodedConstructor, BigInteger.ZERO).send();
+                    TestContract.class, web3j, SampleKeys.CREDENTIALS, 
+                    TEST_CONTRACT_CHAIN_ID, ManagedTransaction.GAS_PRICE, 
+                    Contract.GAS_LIMIT, "0xcafed00d", encodedConstructor, 
+                    BigInteger.ZERO).send();
         } catch (InterruptedException e) {
             throw e;
         } catch (ExecutionException e) {
@@ -466,9 +468,10 @@ public class ContractTest extends ManagedTransactionTester {
 
     private static class TestContract extends Contract {
         public TestContract(
-                String contractAddress, Web3j web3j, Credentials credentials,
-                BigInteger gasPrice, BigInteger gasLimit) {
-            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+                String contractAddress, Web3j web3j, Credentials credentials, 
+                Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+            super(TEST_CONTRACT_BINARY, contractAddress, web3j, credentials, 
+                    chainId, gasPrice, gasLimit);
         }
 
         public TestContract(

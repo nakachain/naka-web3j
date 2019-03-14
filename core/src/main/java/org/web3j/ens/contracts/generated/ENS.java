@@ -68,12 +68,12 @@ public class ENS extends Contract {
     ;
 
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        super(BINARY, contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, credentials, chainId, contractGasProvider);
     }
 
     @Deprecated
@@ -143,8 +143,8 @@ public class ENS extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(ENS.class, web3j, credentials, contractGasProvider, BINARY, "");
+    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        return deployRemoteCall(ENS.class, web3j, credentials, chainId, contractGasProvider, BINARY, "");
     }
 
     public static RemoteCall<ENS> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
@@ -152,8 +152,8 @@ public class ENS extends Contract {
     }
 
     @Deprecated
-    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return deployRemoteCall(ENS.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
+    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(ENS.class, web3j, credentials, chainId, gasPrice, gasLimit, BINARY, "");
     }
 
     @Deprecated
@@ -296,8 +296,8 @@ public class ENS extends Contract {
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENS(contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
     }
 
     @Deprecated
@@ -305,8 +305,8 @@ public class ENS extends Contract {
         return new ENS(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, credentials, contractGasProvider);
+    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        return new ENS(contractAddress, web3j, credentials, chainId, contractGasProvider);
     }
 
     public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {

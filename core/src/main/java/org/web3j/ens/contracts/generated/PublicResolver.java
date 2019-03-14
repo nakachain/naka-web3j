@@ -94,12 +94,12 @@ public class PublicResolver extends Contract {
     ;
 
     @Deprecated
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        super(BINARY, contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
     }
 
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, credentials, chainId, contractGasProvider);
     }
 
     @Deprecated
@@ -237,9 +237,9 @@ public class PublicResolver extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider, String ensAddr) {
+    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider, String ensAddr) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
-        return deployRemoteCall(PublicResolver.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
+        return deployRemoteCall(PublicResolver.class, web3j, credentials, chainId, contractGasProvider, BINARY, encodedConstructor);
     }
 
     public static RemoteCall<PublicResolver> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider, String ensAddr) {
@@ -248,9 +248,9 @@ public class PublicResolver extends Contract {
     }
 
     @Deprecated
-    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, String ensAddr) {
+    public static RemoteCall<PublicResolver> deploy(Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit, String ensAddr) {
         String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(ensAddr)));
-        return deployRemoteCall(PublicResolver.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
+        return deployRemoteCall(PublicResolver.class, web3j, credentials, chainId, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     @Deprecated
@@ -462,8 +462,8 @@ public class PublicResolver extends Contract {
     }
 
     @Deprecated
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return new PublicResolver(contractAddress, web3j, credentials, gasPrice, gasLimit);
+    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        return new PublicResolver(contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
     }
 
     @Deprecated
@@ -471,8 +471,8 @@ public class PublicResolver extends Contract {
         return new PublicResolver(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return new PublicResolver(contractAddress, web3j, credentials, contractGasProvider);
+    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        return new PublicResolver(contractAddress, web3j, credentials, chainId, contractGasProvider);
     }
 
     public static PublicResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
