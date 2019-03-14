@@ -376,6 +376,7 @@ public class SolidityFunctionWrapper extends Generator {
         return toReturn.build();
     }
 
+    // Constructors using the Credentials authType need the chainId
     private static void addCredentialsConstructorParams(
             MethodSpec.Builder toReturn, String authName, 
             boolean withGasProvider) {
@@ -395,6 +396,7 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
+    // Constructors using the TransactionManager authType don't need the chainId
     private static void addTransactionManagerConstructorParams(
             MethodSpec.Builder toReturn, String authName, 
             boolean withGasProvider) {
@@ -526,16 +528,30 @@ public class SolidityFunctionWrapper extends Generator {
         }
     }
 
-    private static MethodSpec buildLoad(
-            String className, Class authType, String authName, boolean withGasProvider) {
+    private static MethodSpec buildLoad(String className, Class authType, 
+            String authName, boolean withGasProvider) {
         MethodSpec.Builder toReturn = MethodSpec.methodBuilder("load")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeVariableName.get(className, Type.class))
                 .addParameter(String.class, CONTRACT_ADDRESS)
                 .addParameter(Web3j.class, WEB3J)
-                .addParameter(authType, authName)
-                .addParameter(Long.class, CHAIN_ID);
+                .addParameter(authType, authName);
 
+        if (authType == Credentials.class) {
+            addCredentialsLoadParams(toReturn, className, authName, 
+                    withGasProvider);
+        } else if (authType == TransactionManager.class) {
+            addTransactionManagerLoadParams(toReturn, className, authName, 
+                    withGasProvider);
+        }
+
+        return toReturn.build();
+    }
+
+    // Constructors using the Credentials authType need the chainId
+    private static void addCredentialsLoadParams(MethodSpec.Builder toReturn, 
+            String className, String authName, boolean withGasProvider) {
+        toReturn.addParameter(Long.class, CHAIN_ID);
         if (withGasProvider) {
             toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
                     .addStatement("return new $L($L, $L, $L, $L, $L)", className,
@@ -549,8 +565,24 @@ public class SolidityFunctionWrapper extends Generator {
                             CHAIN_ID, GAS_PRICE, GAS_LIMIT)
                     .addAnnotation(Deprecated.class);
         }
+    }
 
-        return toReturn.build();
+    // Constructors using the TransactionManager authType don't need the chainId
+    private static void addTransactionManagerLoadParams(MethodSpec.Builder toReturn, 
+            String className, String authName, boolean withGasProvider) {
+        if (withGasProvider) {
+            toReturn.addParameter(ContractGasProvider.class, CONTRACT_GAS_PROVIDER)
+                    .addStatement("return new $L($L, $L, $L, $L)", className,
+                            CONTRACT_ADDRESS, WEB3J, authName,  
+                            CONTRACT_GAS_PROVIDER);
+        } else {
+            toReturn.addParameter(BigInteger.class, GAS_PRICE)
+                    .addParameter(BigInteger.class, GAS_LIMIT)
+                    .addStatement("return new $L($L, $L, $L, $L, $L)", 
+                            className, CONTRACT_ADDRESS, WEB3J, authName, 
+                            GAS_PRICE, GAS_LIMIT)
+                    .addAnnotation(Deprecated.class);
+        }
     }
 
     String addParameters(
