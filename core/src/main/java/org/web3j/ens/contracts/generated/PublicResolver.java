@@ -93,13 +93,15 @@ public class PublicResolver extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Utf8String>(true) {}, new TypeReference<Utf8String>() {}));
     ;
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     @Deprecated
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
+    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
-    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, chainId, contractGasProvider);
+    protected PublicResolver(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -462,8 +464,8 @@ public class PublicResolver extends Contract {
     }
 
     @Deprecated
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
-        return new PublicResolver(contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
+    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new PublicResolver(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
@@ -471,8 +473,8 @@ public class PublicResolver extends Contract {
         return new PublicResolver(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
-        return new PublicResolver(contractAddress, web3j, credentials, chainId, contractGasProvider);
+    public static PublicResolver load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new PublicResolver(contractAddress, web3j, credentials, contractGasProvider);
     }
 
     public static PublicResolver load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {

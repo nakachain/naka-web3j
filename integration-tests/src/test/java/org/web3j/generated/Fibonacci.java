@@ -43,13 +43,15 @@ public class Fibonacci extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
     ;
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     @Deprecated
     protected Fibonacci(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
     protected Fibonacci(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -110,12 +112,12 @@ public class Fibonacci extends Contract {
     }
 
     public static RemoteCall<Fibonacci> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(Fibonacci.class, web3j, credentials, contractGasProvider, BINARY, "");
+        return deployRemoteCall(Fibonacci.class, web3j, credentials, CHAIN_ID, contractGasProvider, BINARY, "");
     }
 
     @Deprecated
     public static RemoteCall<Fibonacci> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return deployRemoteCall(Fibonacci.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
+        return deployRemoteCall(Fibonacci.class, web3j, credentials, CHAIN_ID, gasPrice, gasLimit, BINARY, "");
     }
 
     public static RemoteCall<Fibonacci> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {

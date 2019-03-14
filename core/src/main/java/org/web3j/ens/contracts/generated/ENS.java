@@ -67,13 +67,15 @@ public class ENS extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint64>() {}));
     ;
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     @Deprecated
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
+    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
-    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, chainId, contractGasProvider);
+    protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -296,8 +298,8 @@ public class ENS extends Contract {
     }
 
     @Deprecated
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
-        return new ENS(contractAddress, web3j, credentials, chainId, gasPrice, gasLimit);
+    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+        return new ENS(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
@@ -305,8 +307,8 @@ public class ENS extends Contract {
         return new ENS(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
-        return new ENS(contractAddress, web3j, credentials, chainId, contractGasProvider);
+    public static ENS load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new ENS(contractAddress, web3j, credentials, contractGasProvider);
     }
 
     public static ENS load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {

@@ -34,13 +34,15 @@ public class ShipIt extends Contract {
 
     public static final String FUNC_SHIPMENTS = "shipments";
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     @Deprecated
     protected ShipIt(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
     protected ShipIt(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -75,12 +77,12 @@ public class ShipIt extends Contract {
     }
 
     public static RemoteCall<ShipIt> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(ShipIt.class, web3j, credentials, contractGasProvider, BINARY, "");
+        return deployRemoteCall(ShipIt.class, web3j, credentials, CHAIN_ID, contractGasProvider, BINARY, "");
     }
 
     @Deprecated
     public static RemoteCall<ShipIt> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return deployRemoteCall(ShipIt.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
+        return deployRemoteCall(ShipIt.class, web3j, credentials, CHAIN_ID, gasPrice, gasLimit, BINARY, "");
     }
 
     public static RemoteCall<ShipIt> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
