@@ -47,6 +47,8 @@ public class MetaCoin extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     protected static final HashMap<String, String> _addresses;
 
     static {
@@ -56,11 +58,11 @@ public class MetaCoin extends Contract {
 
     @Deprecated
     protected MetaCoin(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
     protected MetaCoin(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -96,7 +98,7 @@ public class MetaCoin extends Contract {
     }
 
     public static RemoteCall<MetaCoin> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(MetaCoin.class, web3j, credentials, contractGasProvider, BINARY, "");
+        return deployRemoteCall(MetaCoin.class, web3j, credentials, CHAIN_ID, contractGasProvider, BINARY, "");
     }
 
     public static RemoteCall<MetaCoin> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
@@ -105,7 +107,7 @@ public class MetaCoin extends Contract {
 
     @Deprecated
     public static RemoteCall<MetaCoin> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return deployRemoteCall(MetaCoin.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
+        return deployRemoteCall(MetaCoin.class, web3j, credentials, CHAIN_ID, gasPrice, gasLimit, BINARY, "");
     }
 
     @Deprecated

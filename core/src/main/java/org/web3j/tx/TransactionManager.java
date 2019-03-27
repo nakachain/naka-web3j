@@ -70,6 +70,4 @@ public abstract class TransactionManager {
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }
-
-
 }

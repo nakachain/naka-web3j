@@ -67,13 +67,15 @@ public class ENS extends Contract {
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>(true) {}, new TypeReference<Uint64>() {}));
     ;
 
+    public static final Long CHAIN_ID = Long.valueOf(1);
+
     @Deprecated
     protected ENS(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, gasPrice, gasLimit);
     }
 
     protected ENS(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+        super(BINARY, contractAddress, web3j, credentials, CHAIN_ID, contractGasProvider);
     }
 
     @Deprecated
@@ -143,8 +145,8 @@ public class ENS extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
-        return deployRemoteCall(ENS.class, web3j, credentials, contractGasProvider, BINARY, "");
+    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, Long chainId, ContractGasProvider contractGasProvider) {
+        return deployRemoteCall(ENS.class, web3j, credentials, chainId, contractGasProvider, BINARY, "");
     }
 
     public static RemoteCall<ENS> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
@@ -152,8 +154,8 @@ public class ENS extends Contract {
     }
 
     @Deprecated
-    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
-        return deployRemoteCall(ENS.class, web3j, credentials, gasPrice, gasLimit, BINARY, "");
+    public static RemoteCall<ENS> deploy(Web3j web3j, Credentials credentials, Long chainId, BigInteger gasPrice, BigInteger gasLimit) {
+        return deployRemoteCall(ENS.class, web3j, credentials, chainId, gasPrice, gasLimit, BINARY, "");
     }
 
     @Deprecated

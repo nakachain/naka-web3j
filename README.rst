@@ -1,3 +1,7 @@
+Bintray
+=======
+https://bintray.com/nakachain/naka-web3j/naka-web3j
+
 .. To build this file locally ensure docutils Python package is installed and run:
    $ rst2html.py README.rst README.html
 
